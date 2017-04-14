@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <android.support.v7.widget.CardView
+        xmlns:cv="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/cardview_margin"
+        android:layout_marginRight="@dimen/cardview_margin"
+        android:layout_marginTop="@dimen/cardview_margin_vert"
+        android:layout_marginBottom="@dimen/cardview_margin_vert"
+        android:id="@+id/cv"
+        app:cardUseCompatPadding="true"
+        app:cardPreventCornerOverlap="false"
+        app:cardElevation="@dimen/cardview_elevation"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        cv:cardCornerRadius="@dimen/cardview_corner_radius">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/cardview_ll_padding"
+            android:orientation="vertical">
+
+            <!-- Главный элемент -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/layout"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/layout1"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/train_depart_time"
+                        android:textSize="@dimen/text_size_verylarge"
+                        android:padding="0dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/train_travel_time"
+                        android:textSize="@dimen/text_size"
+                        android:padding="0dp"
+                        android:textStyle="normal"
+                        android:textColor="@color/colorGrey"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/train_arrival_time"
+                        android:textSize="@dimen/text_size"
+                        android:padding="0dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/layout2"
+                    android:layout_toRightOf="@id/layout1"
+                    android:layout_toLeftOf="@+id/layout3"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:maxLines="4"
+                        android:layout_weight="300"
+                        android:id="@+id/train_route"
+                        android:textSize="@dimen/text_size_large"
+                        android:textStyle="normal"
+                        android:textColor="@color/colorBlack"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/layout3"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="2dp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:paddingBottom="2dp"
+                        android:layout_marginRight="4dp"
+                        android:id="@+id/train_num"
+                        android:background="@drawable/rounded_blue"
+                        android:textSize="@dimen/text_size"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="2dp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:paddingBottom="2dp"
+                        android:id="@+id/train_reg"
+                        android:text="@string/text_ereg"
+                        android:background="@drawable/rounded_reg"
+                        android:textSize="@dimen/text_size"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"/>
+                </LinearLayout>
+
+
+            </RelativeLayout>
+            <!-- Вспомогательные элементы (зависит от наличия мест) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:id="@+id/seats_prices"
+                android:orientation="vertical">
+
+                <View style="@style/Divider"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/train_o"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_overall"
+                        android:textSize="@dimen/text_size"
+                        android:textStyle="normal"
+                        android:textColor="@color/colorGrey"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size"
+                        android:text="@string/text_seats_in_class"
+                        android:textStyle="normal"
+                        android:layout_toLeftOf="@+id/spacer1"
+                        android:textColor="@color/colorGrey"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:id="@+id/spacer1"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/spacer1"
+                        android:id="@+id/train_seats_o"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/train_price_o"
+                        android:textSize="@dimen/text_size"
+                        android:textStyle="normal"
+                        android:textColor="@color/colorBlack"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/train_s"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_sedentary"
+                        android:textSize="@dimen/text_size"
+                        android:textStyle="normal"
+                        android:textColor="@color/colorGrey"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/text_size"
+                            android:text="@string/text_seats_in_class"
+                            android:textStyle="normal"
+                            android:layout_toLeftOf="@+id/spacer2"
+                            android:textColor="@color/colorGrey"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:id="@+id/spacer2"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/spacer2"
+                            android:id="@+id/train_seats_s"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/train_price_s"
+                        android:textSize="@dimen/text_size"
+                        android:textStyle="normal"
+                        android:textColor="@color/colorBlack"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/train_sc"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_second_class"
+                        android:textSize="@dimen/text_size"
+                        android:textStyle="normal"
+                        android:textColor="@color/colorGrey"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size"
+                        android:text="@string/text_seats_in_class"
+                        android:textStyle="normal"
+                        android:layout_toLeftOf="@+id/spacer3"
+                        android:textColor="@color/colorGrey"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:id="@+id/spacer3"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/spacer3"
+                        android:id="@+id/train_seats_sc"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/train_price_sc"
+                        android:textSize="@dimen/text_size"
+                        android:textStyle="normal"
+                        android:textColor="@color/colorBlack"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/train_c"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_compartment"
+                        android:textSize="@dimen/text_size"
+                        android:textStyle="normal"
+                        android:textColor="@color/colorGrey"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size"
+                        android:text="@string/text_seats_in_class"
+                        android:textStyle="normal"
+                        android:layout_toLeftOf="@+id/spacer4"
+                        android:textColor="@color/colorGrey"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:id="@+id/spacer4"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/spacer4"
+                        android:id="@+id/train_seats_c"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/train_price_c"
+                        android:textSize="@dimen/text_size"
+                        android:textStyle="normal"
+                        android:textColor="@color/colorBlack"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/train_su"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_soft"
+                        android:textSize="@dimen/text_size"
+                        android:textStyle="normal"
+                        android:textColor="@color/colorGrey"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size"
+                        android:text="@string/text_seats_in_class"
+                        android:textStyle="normal"
+                        android:layout_toLeftOf="@+id/spacer5"
+                        android:textColor="@color/colorGrey"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:id="@+id/spacer5"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/spacer5"
+                        android:id="@+id/train_seats_su"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/train_price_su"
+                        android:textSize="@dimen/text_size"
+                        android:textStyle="normal"
+                        android:textColor="@color/colorBlack"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/train_sw"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_suite_wagon"
+                    android:textSize="@dimen/text_size"
+                    android:textStyle="normal"
+                    android:textColor="@color/colorGrey"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size"
+                    android:text="@string/text_seats_in_class"
+                    android:textStyle="normal"
+                    android:layout_toLeftOf="@+id/spacer6"
+                    android:textColor="@color/colorGrey"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/spacer6"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/spacer6"
+                    android:id="@+id/train_seats_sw"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/train_price_sw"
+                    android:textSize="@dimen/text_size"
+                    android:textStyle="normal"
+                    android:textColor="@color/colorBlack"/>
+            </RelativeLayout>
+
+            </LinearLayout>
+            <!-- На все дни -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:id="@+id/alldays"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <View style="@style/Divider"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size"
+                        android:text="@string/text_alldays"
+                        android:textStyle="normal"
+                        android:textColor="@color/colorGrey"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp"
+                        android:id="@+id/alldays_text"
+                        android:textSize="@dimen/text_size"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>

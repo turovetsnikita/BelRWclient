@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/online_scoreboard"
+        android:title="@string/text_online_scoreboard"
+        android:icon="@drawable/ic_schedule" />
+    <item
+        android:id="@+id/account"
+        android:title="@string/text_drawer_cab"
+        android:icon="@drawable/ic_account" />
+    <item
+        android:id="@+id/data_usage"
+        android:title="@string/text_drawer_usage"
+        android:icon="@drawable/ic_chart"/>
+    <item
+        android:id="@+id/app_settings"
+        android:title="@string/text_drawer_settings"
+        android:icon="@drawable/ic_settings"/>
+    <item
+        android:id="@+id/app_help"
+        android:title="@string/text_drawer_help"
+        android:icon="@drawable/ic_help"/>
+
+    <item
+        android:id="@+id/about"
+        android:title="@string/text_drawer_about"
+        android:icon="@drawable/ic_info"/>
+
+</menu>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="authorization"
+        android:title="Авторизация на poezd.rw.by">
+        <EditTextPreference
+            android:key="login"
+            android:hint="Введите логин"
+            android:inputType="textNoSuggestions"
+            android:title="Логин пользователя">
+        </EditTextPreference>
+        <EditTextPreference
+            android:key="password"
+            android:password="true"
+            android:hint="Введите пароль"
+            android:autoText="false"
+            android:title="Пароль">
+        </EditTextPreference>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="results_screen"
+        android:title="Персонализация">
+        <CheckBoxPreference
+            android:key="departed_show"
+            android:summary="Отображаются бледно"
+            android:title="Отображать отправившиеся поезда">
+        </CheckBoxPreference>
+        <CheckBoxPreference
+            android:key="train_travel_time_show"
+            android:title="Отображать время в пути">
+        </CheckBoxPreference>
+        <ListPreference
+            android:entries="@array/train_details_tab"
+            android:entryValues="@array/train_details_tab_values"
+            android:key="train_details_default_tab"
+            android:defaultValue="1"
+            android:summary="%s"
+            android:title="Экран по умолчанию в деталях о поезде">
+            <!-- параметр %s в summary может баговать -->
+        </ListPreference>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="private"
+        android:title="Хранение данных">
+        <SwitchPreference
+            android:key="save_history"
+            android:title="Сохранять историю">
+        </SwitchPreference>
+        <SwitchPreference
+            android:key="save_cache"
+            android:title="Кешировать последний запрос">
+        </SwitchPreference>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="dev"
+        android:title="dev">
+        <SwitchPreference
+            android:key="authorization_test"
+            android:title="authorization_test">
+        </SwitchPreference>
+    </PreferenceCategory>
+</PreferenceScreen>
