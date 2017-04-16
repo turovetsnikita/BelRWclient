@@ -4,10 +4,10 @@
 
     <solid android:color="#FFF" />
 
-    <corners android:radius="2dp" />
+    <corners android:radius="@dimen/cardview_corner_radius" />
 
     <stroke
-        android:width="2dp"
+        android:width="@dimen/rounded_stroke_width"
         android:color="@color/colorBlue" />
 
 </shape>

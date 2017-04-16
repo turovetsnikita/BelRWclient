@@ -8,6 +8,6 @@
 
     <stroke
         android:width="@dimen/rounded_stroke_width"
-        android:color="@color/colorYellow" />
+        android:color="@color/colorMediumGrey" />
 
 </shape>

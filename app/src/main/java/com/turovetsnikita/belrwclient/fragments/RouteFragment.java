@@ -4,11 +4,9 @@ package com.turovetsnikita.belrwclient.fragments;
  * Created by Nikita on 11.3.17.
  */
 
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,11 +26,12 @@ import java.util.List;
 
 public class RouteFragment extends Fragment {
 //TODO: добавить "Отслеживание" + уведомления? + пункт в боковой панели? + кеш маршрута (автоматом при покупке билета) + Animator
+//TODO: учесть прицепные вагоныы
 
     RecyclerView mrv1;
     private List<Route> route;
     LinearLayoutManager llm;
-    LinearLayout progressbar;
+    LinearLayout progressbar,error_processing_data,error_timeout;
     RouteRVAdapter adapter1;
     String routehref;
     int visitposition;
@@ -69,12 +68,16 @@ public class RouteFragment extends Fragment {
         mrv1.setLayoutManager(llm);
 
         progressbar = (LinearLayout) getView().findViewById(R.id.progressBar);
+        error_processing_data = (LinearLayout) getView().findViewById(R.id.error_processing_data);
+        error_timeout = (LinearLayout) getView().findViewById(R.id.error_timeout);
 
         initializeData();
         initializeAdapter();
 
-        mrv1.setVisibility(View.INVISIBLE);
         progressbar.setVisibility(View.VISIBLE);
+        mrv1.setVisibility(View.GONE);
+        error_processing_data.setVisibility(View.GONE);
+        error_timeout.setVisibility(View.GONE);
 
         routehref = getActivity().getIntent().getStringExtra("routehref");
 
@@ -106,44 +109,19 @@ public class RouteFragment extends Fragment {
             if (result!=null) {
                 parseRoute(result.select("tr.b-train"));
                 if (route!=null) {
-                    mrv1.setVisibility(View.VISIBLE);
-                    progressbar.setVisibility(View.INVISIBLE);
                     initializeAdapter();
                     adapter1.notifyItemRangeInserted(0, route.size());
                     llm.scrollToPosition(visitposition);
-                    mrv1.smoothScrollToPosition(visitposition);
                 }
                 else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle(R.string.text_error)
-                            .setMessage(R.string.text_error_processing_data)
-                            .setCancelable(false)
-                            .setPositiveButton(R.string.text_ok,
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    });
-                    AlertDialog alert = builder.create();
-                    alert.show();
+                    error_processing_data.setVisibility(View.VISIBLE);
                 }
             }
             else { //html не получен (==null)
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle(R.string.text_error)
-                        .setMessage(R.string.text_error_timeout)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.text_ok,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-                AlertDialog alert = builder.create();
-                alert.show();
+                error_timeout.setVisibility(View.VISIBLE);
             }
             mrv1.setVisibility(View.VISIBLE);
-            progressbar.setVisibility(View.INVISIBLE);
+            progressbar.setVisibility(View.GONE);
         }
     }
 

@@ -18,5 +18,8 @@
         android:visibility="visible"/>
 
     <include layout="@layout/spinner_label" />
+    <include layout="@layout/warning_no_cars" />
+    <include layout="@layout/error_timeout" />
+    <include layout="@layout/error_processing_data" />
 
 </RelativeLayout>

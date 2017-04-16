@@ -57,6 +57,16 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.turovetsnikita.belrwclient.adapters.ItemClickSupport;
 import com.turovetsnikita.belrwclient.data.AppBase;
 import com.turovetsnikita.belrwclient.data.AppBase.RecentDirections;
@@ -64,7 +74,8 @@ import com.turovetsnikita.belrwclient.data.AppDbHelper;
 
 //TODO: min API operability checked - 19 (4.4)
 //TODO: не проработаны ладшафтные ориентации
-//TODO: полный переезд с AlertDialog на Snackbar
+//TODO: избавитьсся от AlertDialog
+//TODO: уведомления об отправлении/скором прибытии
 
 public class DirectionActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -78,7 +89,7 @@ public class DirectionActivity extends AppCompatActivity
     RecentRVAdapter adapter;
     Locale russian = new Locale("ru");
     Calendar date = Calendar.getInstance();
-    SimpleDateFormat df1 = new SimpleDateFormat("dd MMM yy, EE", russian);
+    SimpleDateFormat df1 = new SimpleDateFormat("EE, dd MMM", russian);
 
     Date mx; //выбранная дата
     long st,en;
@@ -1054,7 +1065,40 @@ public class DirectionActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+/*
+        final IProfile profile = new ProfileDrawerItem().withName("Batman").withEmail("batman@gmail.com");
 
+        // Create the AccountHeader
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withCompactStyle(true)
+                .withHeaderBackground(R.drawable.side_nav_bar)
+                .addProfiles(
+                        profile
+                )
+                .withSavedInstance(savedInstanceState)
+                .build();
+        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(1).withName("R.string.drawer_item_home");
+        SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(2).withName("R.string.drawer_item_settings");
+        Drawer result = new DrawerBuilder()
+                .withActivity(this)
+                .withAccountHeader(headerResult)
+                .withToolbar(toolbar)
+                .addDrawerItems(
+                        item1,
+                        new DividerDrawerItem(),
+                        item2,
+                        new SecondaryDrawerItem()
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        // do something with the clicked item :D
+                        return true;
+                    }
+                })
+                .build();
+*/
         MultiEditText = (AutoCompleteTextView) findViewById(R.id.AutoCompleteTextView);
         MultiEditText2 = (AutoCompleteTextView) findViewById(R.id.AutoCompleteTextView2);
         MultiEditTextLayout = (TextInputLayout) findViewById(R.id.textInputLayout);
@@ -1356,7 +1400,6 @@ public class DirectionActivity extends AppCompatActivity
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         builder.setTitle("ВАЖНО")
                                 .setMessage(elem.text())
-                                //.setMessage(result.select("span").toString()+"/n"+result.select("td.status").text())
                                 .setCancelable(false)
                                 .setPositiveButton("OK",
                                         new DialogInterface.OnClickListener() {

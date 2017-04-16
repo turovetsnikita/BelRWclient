@@ -59,7 +59,27 @@ public class RouteRVAdapter extends RecyclerView.Adapter<RouteRVAdapter.RouteVie
                 black = Color.parseColor("#212121"),
                 accent = Color.parseColor("#ffa000");
 
-        if (!route.get(i).visit) {
+        routeViewHolder.station.setText(route.get(i).station);
+
+        routeViewHolder.stop_date.setText("");
+        routeViewHolder.dep_date.setText("");
+
+        if (!route.get(i).stop_int.equals(""))
+            routeViewHolder.stop_int.setText(" ("+route.get(i).stop_int+")");
+        else routeViewHolder.stop_int.setText("");
+
+
+        if (route.get(i).visit) {
+            routeViewHolder.station.setTextColor(black);
+            if ((route.get(i).stop_time.equals("")) && (route.get(i).dep_time.equals("")))
+                routeViewHolder.stop_time.setTextColor(med_grey);
+            else routeViewHolder.stop_time.setTextColor(black);
+            routeViewHolder.stop_date.setTextColor(accent); //
+            routeViewHolder.dep_time.setTextColor(black);
+            routeViewHolder.dep_date.setTextColor(accent); //
+            routeViewHolder.stop_int.setTextColor(black);
+        }
+        else {
             routeViewHolder.station.setTextColor(med_grey);
             routeViewHolder.stop_time.setTextColor(med_grey);
             routeViewHolder.stop_date.setTextColor(med_grey);
@@ -67,41 +87,28 @@ public class RouteRVAdapter extends RecyclerView.Adapter<RouteRVAdapter.RouteVie
             routeViewHolder.dep_date.setTextColor(med_grey);
             routeViewHolder.stop_int.setTextColor(med_grey);
         }
+
+        if ((route.get(i).stop_time.equals("")) && (route.get(i).dep_time.equals(""))) {
+            routeViewHolder.stop_time.setText(R.string.text_no_data);
+            routeViewHolder.dep_time.setText("");
+        }
         else {
-            routeViewHolder.station.setTextColor(black);
-            routeViewHolder.stop_time.setTextColor(black);
-            routeViewHolder.stop_date.setTextColor(accent); //
-            routeViewHolder.dep_time.setTextColor(black);
-            routeViewHolder.dep_date.setTextColor(accent); //
-            routeViewHolder.stop_int.setTextColor(black);
+            if (!route.get(i).stop_time.equals("")) {
+                if (!route.get(i).stop_date.equals("")) {
+                    routeViewHolder.stop_time.setText(route.get(i).stop_time + ", ");
+                    routeViewHolder.stop_date.setText(route.get(i).stop_date);
+                } else
+                    routeViewHolder.stop_time.setText(route.get(i).stop_time);
+            } else routeViewHolder.stop_time.setText("(Начальная станция)");
+
+            if (!route.get(i).dep_time.equals("")) {
+                if (!route.get(i).dep_date.equals("")) {
+                    routeViewHolder.dep_time.setText(" — " + route.get(i).dep_time + ", ");
+                    routeViewHolder.dep_date.setText(route.get(i).dep_date);
+                } else routeViewHolder.dep_time.setText(" — " + route.get(i).dep_time);
+            } else routeViewHolder.dep_time.setText(" — (Конечная станция)");
         }
-        routeViewHolder.station.setText(route.get(i).station);
 
-        routeViewHolder.stop_date.setText("");
-        routeViewHolder.dep_date.setText("");
-
-        if (!route.get(i).stop_time.equals("")) {
-            if (!route.get(i).stop_date.equals("")) {
-                routeViewHolder.stop_time.setText(route.get(i).stop_time + ", ");
-                routeViewHolder.stop_date.setText(route.get(i).stop_date);
-            }
-            else
-                routeViewHolder.stop_time.setText(route.get(i).stop_time);
-        }
-        else routeViewHolder.stop_time.setText("(Начальная станция)");
-
-        if (!route.get(i).dep_time.equals("")) {
-            if (!route.get(i).dep_date.equals("")) {
-                routeViewHolder.dep_time.setText(" — " + route.get(i).dep_time + ", ");
-                routeViewHolder.dep_date.setText(route.get(i).dep_date);
-            }
-            else routeViewHolder.dep_time.setText(" — " + route.get(i).dep_time);
-        }
-        else routeViewHolder.dep_time.setText(" — (Конечная станция)");
-
-        if (!route.get(i).stop_int.equals(""))
-            routeViewHolder.stop_int.setText(" ("+route.get(i).stop_int+")");
-        else routeViewHolder.stop_int.setText("");
     }
 
     @Override

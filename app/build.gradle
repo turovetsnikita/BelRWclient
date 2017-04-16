@@ -38,6 +38,6 @@ dependencies {
         transitive = true
     }
     compile 'com.bignerdranch.android:expandablerecyclerview:3.0.0-RC1'
-    compile 'com.lapism:searchview:4.0'
+    compile 'com.miguelcatalan:materialsearchview:1.4.0'
     testCompile 'junit:junit:4.12'
 }

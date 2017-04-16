@@ -70,10 +70,12 @@
     <string name="text_error">Ошибка</string>
     <string name="text_refresh">Обновить</string>
     <string name="text_no_internet">Нет соединения</string>
+
     <string name="text_error_timeout">Ошибка/таймаут соединения</string>
-    <string name="text_error_cars">Ошибка при запросе данных о вагонах</string>
     <string name="text_error_processing_data">Ошибка при обработке данных</string>
-    <string name="text_spinner">Соединение,\nпожалуйста, подождите…</string>
+    <string name="text_spinner">Соединение, пожалуйста, подождите…</string>
+    <string name="text_warning_cars">Информация о вагонах данного поезда недоступна</string>
+    <string name="text_warning_no_trains">В данном направлении и в заданную дату поездов не найдено</string>
 
     <string name="text_enter_depart_station">Введите станцию отправления</string>
     <string name="text_enter_arrival_station">Введите станцию прибытия</string>

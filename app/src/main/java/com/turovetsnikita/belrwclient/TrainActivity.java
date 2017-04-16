@@ -54,13 +54,14 @@ public class TrainActivity extends AppCompatActivity {
 
     SimpleDateFormat tf1 = new SimpleDateFormat("HH", russian),
             tf2 = new SimpleDateFormat("mm", russian),
-            df1 = new SimpleDateFormat("dd MMM yy, EE", russian),
+            df1 = new SimpleDateFormat("EE, dd MMM", russian),
             df2 = new SimpleDateFormat("yyyy-MM-dd", russian);
 
     String[] cl = {"Общий","Сидячий","Плацкартный","Купе","Мягкий","СВ"};
     int LENGTH_VERY_LONG = 5000;
 
     private AppDbHelper mDbHelper;
+    private int firstnotdeparted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,9 +147,12 @@ public class TrainActivity extends AppCompatActivity {
         invalidateOptionsMenu();
         mrv1.setVisibility(View.INVISIBLE);
         mprogressbar.setVisibility(View.VISIBLE);
-        if (isequalsActivityPreferences() && (readTrainCache()!=null)) {
-            train = readTrainCache();
+        train = readTrainCache();
+        if (isequalsActivityPreferences() && (train.size()>0)) {
+            mrv1.setVisibility(View.VISIBLE);
             initializeAdapter();
+            //adapter.notifyItemRangeInserted(0, train.size()); //анимация
+            llm.scrollToPosition(firstnotdeparted);
             Snackbar.make(coordLayout, "Обновлено " + textRefreshTime() + " назад", LENGTH_VERY_LONG)
                     .setAction("Обновить", new View.OnClickListener() {
                         @Override
@@ -187,7 +191,6 @@ public class TrainActivity extends AppCompatActivity {
                             }
                         }
                     }).show();
-            mrv1.setVisibility(View.VISIBLE);
             mprogressbar.setVisibility(View.GONE);
             invalidateOptionsMenu();
         }
@@ -237,7 +240,7 @@ public class TrainActivity extends AppCompatActivity {
                         getIntent().getStringExtra("depart")+
                         "&from_exp=0&from_esr=0&to="+
                         getIntent().getStringExtra("arrival")+
-                        "&to_exp=0&to_esr=0&date="+ //TODO: значимые (при наличии одноименных станций), но не обязательные данные from_exp и from_esr, to_exp и to_esr
+                        "&to_exp=0&to_esr=0&date="+ //TODO: код уникален, название станции - нет
                         date)
                         .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
                         .timeout(20*1000)
@@ -257,15 +260,17 @@ public class TrainActivity extends AppCompatActivity {
 
                 if ((train.size() != 0)) { //порядок
 
+                    mrv1.setVisibility(View.VISIBLE);
+                    mprogressbar.setVisibility(View.GONE);
                     initializeAdapter(); //адаптер
                     adapter.notifyItemRangeInserted(0, train.size()); //анимация
+                    llm.scrollToPosition(firstnotdeparted);
                     invalidateOptionsMenu();
                 }
                 else { //если нет поездов/ошибка сайта/html не разобран
                     String message;
                     if (!result.select("div.b-note").text().equals("")) {
                         message = result.select("div.b-note").text();
-                        //if (message.equals(""))
                     }
                     else message = "По вашему запросу ничего не найдено";
 
@@ -298,8 +303,6 @@ public class TrainActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-            mrv1.setVisibility(View.VISIBLE);
-            mprogressbar.setVisibility(View.GONE);
         }
     }
 
@@ -308,7 +311,8 @@ public class TrainActivity extends AppCompatActivity {
         Element tr_elmt; //элемент с данными о поезде
         Elements seats_elmt; //элемент с данными о местах на поезд
         long time = System.currentTimeMillis();
-        train.clear();
+        initializeData();
+        firstnotdeparted = 0;
         for (int i = 0; i < elements.size(); i++) {
             String alldays = "",href = "",seatshref = "";
             short[] arr1 = {0, 0, 0, 0, 0, 0};
@@ -434,7 +438,7 @@ public class TrainActivity extends AppCompatActivity {
             }
 
             //создаем объект
-            train.add(new Train(tr_elmt.select("small.train_id").text(),
+            train.add(train.size(), new Train(tr_elmt.select("small.train_id").text(),
                     lines,
                     tr_elmt.select("a.train_text").text(),
                     train_start_time,
@@ -446,6 +450,7 @@ public class TrainActivity extends AppCompatActivity {
                     alldays,
                     href,
                     seatshref));
+            if (train.get(train.size()-1).t_depart.contains("-")) firstnotdeparted = train.size();
         }
         clearTrainCache();
         for (int i=0;i<train.size();i++) saveTrainCache(train.get(i));
@@ -492,7 +497,7 @@ public class TrainActivity extends AppCompatActivity {
     private List<Train> readTrainCache() {
         List<Train> train2 = new ArrayList<>();
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
+        firstnotdeparted = 0;
         String[] projection = {
                 TrainCache._ID,
                 TrainCache.num,
@@ -552,6 +557,7 @@ public class TrainActivity extends AppCompatActivity {
                         unpackArray(currentTrain_seats),unpackArray(currentTrain_price),
                         Boolean.valueOf(currentReg),currentAlldays,
                         currentRoutehref,currentSeatshref));
+                if (currentT_depart.contains("-")) firstnotdeparted = train2.size();
             }
         } finally {
             cursor.close();
@@ -589,15 +595,7 @@ public class TrainActivity extends AppCompatActivity {
         String res;
         long interval = System.currentTimeMillis() - Long.valueOf(getActivityPreferences("refreshed"));
         if (interval<60*1000) {
-            res=String.valueOf((int)interval/(1000));
-            if ((res.length()==2) && (res.startsWith("1"))) res+=" секунд";
-            else switch (res.substring(res.length()-1,res.length())) {
-                case "1": { res+=" секунду"; break;}
-                case "2": { res+=" секунды"; break;}
-                case "3": { res+=" секунды"; break;}
-                case "4": { res+=" секунды"; break;}
-                default: { res+=" секунд"; break;}
-            }
+            res="менее 1 минуты";
         }
         else {
             if (interval < 60 * 60 * 1000) {
@@ -687,7 +685,7 @@ public class TrainActivity extends AppCompatActivity {
     //изменение состояний меню извне, с помощью invalidateOptionsMenu()
     @Override
     public boolean onPrepareOptionsMenu (Menu menu) {
-        if (train.size()!=0) menu.getItem(0).setVisible(true);
+        if (/*(train.size()!=0) && */(train!=null)) menu.getItem(0).setVisible(true);
         else menu.getItem(0).setVisible(false);
         return true;
     }

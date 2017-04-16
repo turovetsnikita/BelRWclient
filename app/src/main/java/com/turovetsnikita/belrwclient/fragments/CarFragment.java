@@ -32,7 +32,7 @@ public class CarFragment extends Fragment{
     RecyclerView mrv2;
     private List<Car> car;
     LinearLayoutManager llm;
-    LinearLayout progressbar;
+    LinearLayout progressbar,warning_cars,error_processing_data,error_timeout;
     CarRVAdapter adapter2;
 
     String carhref;
@@ -65,6 +65,9 @@ public class CarFragment extends Fragment{
         mrv2.setLayoutManager(llm);
 
         progressbar = (LinearLayout) getView().findViewById(R.id.progressBar);
+        warning_cars = (LinearLayout) getView().findViewById(R.id.warning_no_cars);
+        error_processing_data = (LinearLayout) getView().findViewById(R.id.error_processing_data);
+        error_timeout = (LinearLayout) getView().findViewById(R.id.error_timeout);
 
         initializeData();
         initializeAdapter();
@@ -85,6 +88,9 @@ public class CarFragment extends Fragment{
 
         mrv2.setVisibility(View.INVISIBLE);
         progressbar.setVisibility(View.VISIBLE);
+        warning_cars.setVisibility(View.GONE);
+        error_processing_data.setVisibility(View.GONE);
+        error_timeout.setVisibility(View.GONE);
 
         carhref = getActivity().getIntent().getStringExtra("carhref");
 
@@ -100,20 +106,9 @@ public class CarFragment extends Fragment{
             }
         }
         if (carhref.equals("")) { //если смотрим вагоны электричек-дизелей или все 6 типов сразу
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle(R.string.text_error)
-                    .setMessage(R.string.text_error_cars)
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.text_ok,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            });
-            AlertDialog alert = builder.create();
-            alert.show();
+            warning_cars.setVisibility(View.VISIBLE);
             mrv2.setVisibility(View.VISIBLE);
-            progressbar.setVisibility(View.INVISIBLE);
+            progressbar.setVisibility(View.GONE);
         }
     }
 
@@ -148,34 +143,12 @@ public class CarFragment extends Fragment{
                     adapter2.notifyItemRangeInserted(0, car.size());
                 }
                 else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle(R.string.text_error)
-                            .setMessage(R.string.text_error_processing_data)
-                            .setCancelable(false)
-                            .setPositiveButton(R.string.text_ok,
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    });
-                    AlertDialog alert = builder.create();
-                    alert.show();
+                    error_processing_data.setVisibility(View.VISIBLE);
                 }
 
             }
             else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle(R.string.text_error)
-                        .setMessage(R.string.text_no_internet)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.text_ok,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-                AlertDialog alert = builder.create();
-                alert.show();
+                error_timeout.setVisibility(View.VISIBLE);
             }
             mrv2.setVisibility(View.VISIBLE);
             progressbar.setVisibility(View.INVISIBLE);
