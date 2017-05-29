@@ -4,7 +4,9 @@ package com.turovetsnikita.belrwclient.fragments;
  * Created by Nikita on 11.3.17.
  */
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.turovetsnikita.belrwclient.DetailsActivity;
+import com.turovetsnikita.belrwclient.PassengersActivity;
 import com.turovetsnikita.belrwclient.adapters.ItemClickSupport;
 import com.turovetsnikita.belrwclient.R;
 
@@ -75,6 +79,8 @@ public class CarFragment extends Fragment{
         ItemClickSupport.addTo(mrv2).setOnItemClickListener(new ItemClickSupport.OnItemClickListener(){
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                Intent intent = new Intent(getActivity().getApplicationContext(), PassengersActivity.class);
+                startActivity(intent);
                 //TODO: expandable recyclerview
                 //TODO: Chrome -> F12 -> Network -> PaymentRedirect -> Headers -> Form Data (та самая повторная отправка формы)
             }

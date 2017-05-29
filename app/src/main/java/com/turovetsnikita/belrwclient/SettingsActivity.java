@@ -34,7 +34,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         /*ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            // Show the Up button in the action bar.
+            // Show the Up search_button in the action bar.
             actionBar.setDisplayHomeAsUpEnabled(true);
         }*/
     }
@@ -42,7 +42,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
+        // automatically handle clicks on the Home/Up search_button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 

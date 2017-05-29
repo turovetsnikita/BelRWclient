@@ -32,6 +32,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,24 +55,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
-import com.mikepenz.materialdrawer.AccountHeader;
-import com.mikepenz.materialdrawer.AccountHeaderBuilder;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.turovetsnikita.belrwclient.adapters.ItemClickSupport;
 import com.turovetsnikita.belrwclient.data.AppBase;
 import com.turovetsnikita.belrwclient.data.AppBase.RecentDirections;
 import com.turovetsnikita.belrwclient.data.AppDbHelper;
+
 
 //TODO: min API operability checked - 19 (4.4)
 //TODO: не проработаны ладшафтные ориентации
@@ -82,7 +76,7 @@ public class DirectionActivity extends AppCompatActivity
     AutoCompleteTextView MultiEditText, MultiEditText2;
     TextInputLayout MultiEditTextLayout, MultiEditTextLayout2;
     EditText mDate;
-    AppCompatButton button;
+    AppCompatButton search_button,swap_button;
     RecyclerView mrv1;
     ArrayList<Recent> recent = new ArrayList<>(15);
     LinearLayoutManager llm;
@@ -1048,7 +1042,7 @@ public class DirectionActivity extends AppCompatActivity
         };
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.text_route_activity);
+        toolbar.setTitle(R.string.title_direction_activity);
         setSupportActionBar(toolbar); //setTitle строго до этой команды
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -1065,6 +1059,7 @@ public class DirectionActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
 /*
         final IProfile profile = new ProfileDrawerItem().withName("Batman").withEmail("batman@gmail.com");
 
@@ -1104,7 +1099,8 @@ public class DirectionActivity extends AppCompatActivity
         MultiEditTextLayout = (TextInputLayout) findViewById(R.id.textInputLayout);
         MultiEditTextLayout2 = (TextInputLayout) findViewById(R.id.textInputLayout2);
         mDate = (EditText) findViewById(R.id.editText);
-        button = (AppCompatButton) findViewById(R.id.button);
+        search_button = (AppCompatButton) findViewById(R.id.button);
+        swap_button = (AppCompatButton) findViewById(R.id.swap);
         mDate.setText("сегодня");
         mrv1 = (RecyclerView)findViewById(R.id.rv1);
         mrv1.setHasFixedSize(true);
@@ -1150,10 +1146,16 @@ public class DirectionActivity extends AppCompatActivity
                 setDate(v);
             }
         });
-        button.setOnClickListener(new View.OnClickListener() {
+        search_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 search(v);
+            }
+        });
+        swap_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                swap(v);
             }
         });
 
@@ -1240,8 +1242,7 @@ public class DirectionActivity extends AppCompatActivity
             {
                 recent.add(0, new Recent(MultiEditText.getText().toString(),MultiEditText2.getText().toString()));
                 deleteAllHistory();
-                for (int i = 0; i< recent.size(); i++)
-                    insertHistory(recent.get(i).depart, recent.get(i).arrival);
+                insertHistory(recent);
                 initializeAdapter();
                 adapter.notifyItemInserted(0);
                 mrv1.smoothScrollToPosition(0);
@@ -1250,8 +1251,7 @@ public class DirectionActivity extends AppCompatActivity
                 recent.remove(pos);
                 recent.add(0, new Recent(MultiEditText.getText().toString(),MultiEditText2.getText().toString()));
                 deleteAllHistory();
-                for (int i = 0; i< recent.size(); i++)
-                    insertHistory(recent.get(i).depart, recent.get(i).arrival);
+                insertHistory(recent);
                 initializeAdapter();
                 adapter.notifyItemMoved(pos,0);
             }
@@ -1264,12 +1264,25 @@ public class DirectionActivity extends AppCompatActivity
         }
     }
 
+    public void swap(View v) {
+        HideKeybClearFocus();
+        if ((!MultiEditText.getText().toString().equals("")) || (!MultiEditText2.getText().toString().equals(""))) {
+            String buf = MultiEditText.getText().toString();
+            MultiEditText.setText(MultiEditText2.getText().toString());
+            MultiEditText2.setText(buf);
+            startAnimation(true, true);
+        }
+
+        final Animation animationRotate = AnimationUtils.loadAnimation(this, R.anim.rotate);
+        swap_button.startAnimation(animationRotate);
+    }
+
     //проверка уведомлений о перерывах в работе системы покупки билетов //TODO: + тест авторизации
     private class checkNotification extends AsyncTask<String,Integer,Document> {
         @Override
         protected Document doInBackground(String... arg) {
             Document doc;
-            String buf = "", buf2 = "";
+            String buf, buf2;
             Elements findparam;
             Random r;
             do {
@@ -1290,36 +1303,47 @@ public class DirectionActivity extends AppCompatActivity
                             .post();
                 }
                 else {
-                    String mainrwby = "http://rasp.rw.by/ru/route/?from=Минск-Пассажирский&to=Гомель&date=2017-04-20&from_exp=0&from_esr=0&to_exp=2100100&to_esr=150000";
+                    String mainrwby = "http://rasp.rw.by/ru/route/?from=Минск-Пассажирский&to=Гомель&date=2017-06-30&from_exp=0&from_esr=0&to_exp=2100100&to_esr=150000";
                     String useragent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
+                    //String useragent = "Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6";
 
                     Connection.Response response = Jsoup
                             .connect(mainrwby)
                             .userAgent(useragent)
+                            .method(Connection.Method.POST)
                             .execute();
 
                     response = Jsoup
-                            .connect("https://poezd.rw.by/wps/portal/home/login?cancelUrl=" + java.net.URLEncoder.encode(mainrwby, "UTF-8") + "&lang=ru")
+                            //.connect("https://poezd.rw.by/wps/portal/home/login?cancelUrl=" + java.net.URLEncoder.encode(mainrwby, "UTF-8") + "&lang=ru")
+                            .connect("https://poezd.rw.by/wps/PA_eTicketInquire/PaymentRedirect")
                             .userAgent(useragent)
                             .method(Connection.Method.POST)
                             .data("ClientNumber", "1")
                             .data("DepartureStation", "2100001")
                             .data("ArrivalStation", "2100100")
                             .data("TrainNumber", "648Б")
-                            .data("DepartureDate", "20.04.2017")
+                            .data("DepartureDate", "30.06.2017")
                             .data("DepartureTime", "15:44")
-                            .data("CarriageNumber", "6")
-                            .data("CancelUrl", mainrwby)
-                            .data("SuccessUrl", "http://rasp.rw.by/ru")
-                            //.data("CheckValue", "FACBBFCE0CDDA2FA2CB48D2AD57FEA32")
-                            .data("ServiceClass", "1С")
-                            .cookies(response.cookies())
-                            .execute(); // наверное работает (данные формы)
+                            .data("CarriageNumber", "03")
 
-                    for (Map.Entry<String, String> cookie : response.cookies().entrySet())
+                            //.data("CancelUrl", mainrwby)
+                            .data("CancelUrl", "http://rasp.rw.by/ru/route/?from=%D0%9C%D0%B8%D0%BD%D1%81%D0%BA-%D0%9F%D0%B0%D1%81%D1%81%D0%B0%D0%B6%D0%B8%D1%80%D1%81%D0%BA%D0%B8%D0%B9&to=%D0%93%D0%BE%D0%BC%D0%B5%D0%BB%D1%8C&date=2017-06-30&from_exp=0&from_esr=0&to_exp=2100100&to_esr=150000")
+
+                            .data("SuccessUrl", "http://rasp.rw.by/ru")
+                            .data("CheckValue", "149100BBF2A4B4A4C12467877005AC8B")
+                            .data("ServiceClass", "3С")
+                            .cookies(response.cookies())
+                            .followRedirects(true)
+                            .execute(); // неверные данные формы (из-за этого проблемы с "галочкой")
+
+                    for (Map.Entry<String, String> cookie : response.cookies().entrySet()) // лог
                         Log.d("cookie1", cookie.getKey() + " : " + cookie.getValue());
                     for (Map.Entry<String, String> head : response.headers().entrySet())
                         Log.d("headers1", head.getKey() + " : " + head.getValue());
+
+                    String cookiebuf = "";
+                    for (Map.Entry<String, String> cookie : response.cookies().entrySet())
+                        if (cookie.getKey().equals("JSESSIONID")) cookiebuf = cookie.getValue();
 
                     doc = response.parse();
                     if (doc.select("td.status").text().contains("Вход")) {
@@ -1330,19 +1354,38 @@ public class DirectionActivity extends AppCompatActivity
                                 .connect("https://poezd.rw.by" + buf)
                                 .userAgent(useragent)
                                 .method(Connection.Method.POST)
-                                .referrer("https://poezd.rw.by" + buf)
                                 .data("login", sp.getString("login",""))
                                 .data("password", sp.getString("password",""))
                                 .data("_rememberUser", "on")
-                                //.data("ip", "") // необязателен
+                                //.data("ip", "195.50.26.222")
                                 .data("_login", "Войти в систему")
                                 .cookies(response.cookies())
+/*
+                                .cookie("JSESSIONID",cookiebuf)
+                                .cookie("lang","ru")
+                                .cookie("_ym_uid","1487532410917255092")
+                                .cookie("_ym_isad","1")
+                                .cookie("__utmt","1")
+                                .cookie("__utmt_UA-31356575-1","1")
+                                .cookie("_ym_visorc_16948750","w")
+                                .cookie("portalFlyoutIsOpen","")
+                                .cookie("portalOpenFlyout","")
+                                .cookie("_gat","1")
+                                .cookie("__utma","168334370.1490507909.1487532409.1495741916.1496098884.134")
+                                .cookie("__utmb","168334370.18.9.1496099898541")
+                                .cookie("__utmc","168334370")
+                                .cookie("__utmz","168334370.1495574388.132.8.utmcsr=rw.by|utmccn=(referral)|utmcmd=referral|utmcct=/")
+                                .cookie("_ga","GA1.2.1490507909.1487532409")
+                                .cookie("_gid","GA1.2.1806242544.1496099908")
+*/
+                                .followRedirects(true)
                                 .execute(); // авторизация работает!!
 
-                        for (Map.Entry<String, String> cookie : response.cookies().entrySet())
+                        for (Map.Entry<String, String> cookie : response.cookies().entrySet()) // лог
                             Log.d("cookie2", cookie.getKey() + " : " + cookie.getValue());
                         for (Map.Entry<String, String> head : response.headers().entrySet())
                             Log.d("headers2", head.getKey() + " : " + head.getValue());
+                        Log.d("buf-2", buf);
                     }
 
                     doc = response.parse();
@@ -1361,12 +1404,16 @@ public class DirectionActivity extends AppCompatActivity
                             .data("com.sun.faces.VIEW", buf2)
                             .data("viewns_7_48QFVAUK6HA180IQAQVJU80004_:form1", "viewns_7_48QFVAUK6HA180IQAQVJU80004_:form1")
                             .cookies(response.cookies())
-                            .execute(); // "ТЫ НЕ ПРОЙДЕШЬ!" (c)
+                            .cookie("JSESSIONID",cookiebuf) //храним его с момента авторизации
+                            .followRedirects(true)
+                            .execute(); // пытаемся нажать "галочку"
 
-                    for (Map.Entry<String, String> cookie : response.cookies().entrySet())
+                    for (Map.Entry<String, String> cookie : response.cookies().entrySet()) // лог
                         Log.d("cookie3", cookie.getKey() + " : " + cookie.getValue());
                     for (Map.Entry<String, String> head : response.headers().entrySet())
                         Log.d("headers3", head.getKey() + " : " + head.getValue());
+                    Log.d("buf-3", buf);
+                    Log.d("buf2-3", buf2);
 
                     doc = response.parse();
                 }
@@ -1430,27 +1477,43 @@ public class DirectionActivity extends AppCompatActivity
         }
     }
 
-    private void insertHistory(String dep,String arr) {
+    private void insertHistory(List<Recent> ins) {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(RecentDirections.depart, dep);
-        values.put(RecentDirections.arrival, arr);
-        long newRowId = db.insert(RecentDirections.TABLE_NAME, null, values);
+        db.beginTransaction();
+        try {
+            for (int i = 0; i < ins.size(); i++) {
+                ContentValues values = new ContentValues();
+                values.put(RecentDirections.depart, ins.get(i).depart);
+                values.put(RecentDirections.arrival, ins.get(i).arrival);
+                long newRowId = db.insert(RecentDirections.TABLE_NAME, null, values);
+            }
+            db.setTransactionSuccessful();
+        }
+        finally {
+            db.endTransaction();
+        }
     }
 
     private void deleteAllHistory () {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS " + RecentDirections.TABLE_NAME);
-        db.execSQL("CREATE TABLE " + AppBase.RecentDirections.TABLE_NAME + " ("
-                + AppBase.RecentDirections._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + AppBase.RecentDirections.depart + " TEXT NOT NULL, "
-                + AppBase.RecentDirections.arrival + " TEXT NOT NULL);");
+        db.beginTransaction();
+        try {
+            db.execSQL("DROP TABLE IF EXISTS " + RecentDirections.TABLE_NAME);
+            db.execSQL("CREATE TABLE " + AppBase.RecentDirections.TABLE_NAME + " ("
+                    + AppBase.RecentDirections._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + AppBase.RecentDirections.depart + " TEXT NOT NULL, "
+                    + AppBase.RecentDirections.arrival + " TEXT NOT NULL);");
+            db.setTransactionSuccessful();
+        }
+        finally {
+            db.endTransaction();
+        }
     }
 
     private void fromBasetoArray() {
         // Создадим и откроем для чтения базу данных
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
+        db.beginTransaction();
         // Зададим условие для выборки - список столбцов
         String[] projection = {
                 RecentDirections._ID,
@@ -1484,9 +1547,11 @@ public class DirectionActivity extends AppCompatActivity
                 recent.add(i, new Recent(currentDepart,currentArrival));
                 i++;
             }
+            db.setTransactionSuccessful();
         } finally {
             // Всегда закрываем курсор после чтения
             cursor.close();
+            db.endTransaction();
         }
     }
 
@@ -1671,7 +1736,7 @@ public class DirectionActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.route, menu);
+        //getMenuInflater().inflate(R.menu.direction, menu);
         return true;
     }
 
@@ -1679,19 +1744,11 @@ public class DirectionActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
+        // automatically handle clicks on the Home/Up search_button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id==R.id.swap) {
-            HideKeybClearFocus();
-            String buf = MultiEditText.getText().toString();
-            MultiEditText.setText(MultiEditText2.getText().toString());
-            MultiEditText2.setText(buf);
-
-            startAnimation(true,true);
-        }
 
         return super.onOptionsItemSelected(item);
     }

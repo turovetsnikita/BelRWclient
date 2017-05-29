@@ -8,7 +8,8 @@
     <string name="title_activity_train">Результаты поиска</string>
     <string name="title_activity_settings">Настройки</string>
     <string name="title_activity_scoreboard">Онлайн-табло</string>
-    <string name="text_route_activity">Маршрут</string>
+    <string name="title_direction_activity">Направление</string>
+    <string name="title_activity_passengers">Данные пассажиров</string>
 
     <string name="text_depart_station">Станция отправления</string>
     <string name="text_arrival_station">Станция назначения</string>
@@ -100,6 +101,67 @@
 
     <string name="text_follow_depart">Отправился</string>
     <string name="text_follow_on_station">На станции</string>
-    <string name="text_follow_ontheway">В пути</string>
+    <string name="text_follow_ontheway">В пути</string
+        >
+    <string name="text_order_button">Заказать</string>
+
+    <string-array name="Passengers4">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="Passengers3">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="Passengers2">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="Passengers1">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="Passengers0">
+        <item>0</item>
+    </string-array>
+
+    <string-array name="DocTypes">
+        <item>Паспорт Республики Беларусь</item>
+        <item>Паспорт Российской Федерации (новый)</item>
+        <item>Заграничный паспорт Российской Федерации</item>
+        <item>Иностранный документ</item>
+        <item>Паспорт моряка</item>
+        <item>Свидетельство о рождении</item>
+        <item>Военный билет</item>
+        <item>Удостоверение личности</item>
+        <item>Справка об утере паспорта</item>
+        <item>Справка заключенного</item>
+        <item>Вид на жительство</item>
+        <item>Водительское удостоверение</item>
+    </string-array>
+
+    <string-array name="DocTypes2">
+        <item>ПБ</item>
+        <item>ПН</item>
+        <item>ЗП</item>
+        <item>ЗЗ</item>
+        <item>ПМ</item>
+        <item>СР</item>
+        <item>ВБ</item>
+        <item>УЛ</item>
+        <item>СУ</item>
+        <item>СЗ</item>
+        <item>ВЖ</item>
+        <item>ВУ</item>
+    </string-array>
 
 </resources>

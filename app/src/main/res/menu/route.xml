@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/swap"
-        android:title="@string/text_swap"
-        android:icon="@drawable/ic_menu_swap_2_l"
-        app:showAsAction="ifRoom" />
-</menu>

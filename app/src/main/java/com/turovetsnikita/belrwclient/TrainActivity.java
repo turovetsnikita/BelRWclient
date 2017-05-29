@@ -144,11 +144,13 @@ public class TrainActivity extends AppCompatActivity {
     @Override
     protected void onResume () {
         super.onResume();
-        invalidateOptionsMenu();
         mrv1.setVisibility(View.INVISIBLE);
         mprogressbar.setVisibility(View.VISIBLE);
+        initializeData();
+        invalidateOptionsMenu();
         train = readTrainCache();
         if (isequalsActivityPreferences() && (train.size()>0)) {
+            invalidateOptionsMenu();
             mrv1.setVisibility(View.VISIBLE);
             initializeAdapter();
             //adapter.notifyItemRangeInserted(0, train.size()); //анимация
@@ -192,10 +194,11 @@ public class TrainActivity extends AppCompatActivity {
                         }
                     }).show();
             mprogressbar.setVisibility(View.GONE);
-            invalidateOptionsMenu();
         }
         else {
             if (isOnline()) {
+                initializeData();
+                invalidateOptionsMenu();
                 new getData().execute();
             }
             else {
@@ -263,8 +266,8 @@ public class TrainActivity extends AppCompatActivity {
                     mrv1.setVisibility(View.VISIBLE);
                     mprogressbar.setVisibility(View.GONE);
                     initializeAdapter(); //адаптер
-                    adapter.notifyItemRangeInserted(0, train.size()); //анимация
                     llm.scrollToPosition(firstnotdeparted);
+                    adapter.notifyItemRangeInserted(0, train.size()); //анимация
                     invalidateOptionsMenu();
                 }
                 else { //если нет поездов/ошибка сайта/html не разобран
@@ -413,7 +416,7 @@ public class TrainActivity extends AppCompatActivity {
                     }
                 //подготовка части ссылки на свободные места
                 href = tr_elmt.select("div.train_name a").attr("href");
-                if ((lines==1) && (arr1[0]==1000)) seatshref = ""; //на электрички-дизели ссылки нет
+                if (((lines==1) || (lines==4)) && (arr1[0]==1000)) seatshref = ""; //на электрички-дизели ссылки нет
                 else
                     seatshref = "http://rasp.rw.by/ru/ajax/route/car_places/?from="+
                             href.substring(href.indexOf("from_exp=")+9,href.indexOf("from_exp=")+9+7)+
@@ -453,50 +456,67 @@ public class TrainActivity extends AppCompatActivity {
             if (train.get(train.size()-1).t_depart.contains("-")) firstnotdeparted = train.size();
         }
         clearTrainCache();
-        for (int i=0;i<train.size();i++) saveTrainCache(train.get(i));
+        saveTrainCache(train);
         saveActivityPreferences();
     }
 
-    private void saveTrainCache(Train cached) {
+    private void saveTrainCache(List<Train> cached) {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(TrainCache.num, cached.num);
-        values.put(TrainCache.lines, String.valueOf(cached.lines));
-        values.put(TrainCache.tr_route, cached.tr_route);
-        values.put(TrainCache.t_depart, cached.t_depart);
-        values.put(TrainCache.t_travel, cached.t_travel);
-        values.put(TrainCache.t_arrival, cached.t_arrival);
-        values.put(TrainCache.train_seats, packArray(cached.train_seats));
-        values.put(TrainCache.train_price, packArray(cached.train_price));
-        values.put(TrainCache.reg, String.valueOf(cached.reg));
-        values.put(TrainCache.alldays, cached.alldays);
-        values.put(TrainCache.routehref, cached.routehref);
-        values.put(TrainCache.seatshref, cached.seatshref);
-        long newRowId = db.insert(TrainCache.TABLE_NAME, null, values);
+        db.beginTransaction();
+        try {
+            for (int i = 0; i < cached.size(); i++) {
+                ContentValues values = new ContentValues();
+                values.put(TrainCache.num, cached.get(i).num);
+                values.put(TrainCache.lines, String.valueOf(cached.get(i).lines));
+                values.put(TrainCache.tr_route, cached.get(i).tr_route);
+                values.put(TrainCache.t_depart, cached.get(i).t_depart);
+                values.put(TrainCache.t_travel, cached.get(i).t_travel);
+                values.put(TrainCache.t_arrival, cached.get(i).t_arrival);
+                values.put(TrainCache.train_seats, packArray(cached.get(i).train_seats));
+                values.put(TrainCache.train_price, packArray(cached.get(i).train_price));
+                values.put(TrainCache.reg, String.valueOf(cached.get(i).reg));
+                values.put(TrainCache.alldays, cached.get(i).alldays);
+                values.put(TrainCache.routehref, cached.get(i).routehref);
+                values.put(TrainCache.seatshref, cached.get(i).seatshref);
+                long newRowId = db.insert(TrainCache.TABLE_NAME, null, values);
+            }
+            db.setTransactionSuccessful();
+        }
+        finally {
+            db.endTransaction();
+        }
     }
 
     private void clearTrainCache () {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS " + TrainCache.TABLE_NAME);
-        db.execSQL("CREATE TABLE " + AppBase.TrainCache.TABLE_NAME + " ("
-                + AppBase.TrainCache._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + AppBase.TrainCache.num + " TEXT NOT NULL, "
-                + AppBase.TrainCache.lines + " TEXT NOT NULL, "
-                + AppBase.TrainCache.tr_route + " TEXT NOT NULL, "
-                + AppBase.TrainCache.t_depart + " TEXT NOT NULL, "
-                + AppBase.TrainCache.t_travel + " TEXT NOT NULL, "
-                + AppBase.TrainCache.t_arrival + " TEXT NOT NULL, "
-                + AppBase.TrainCache.train_seats + " TEXT NOT NULL, "
-                + AppBase.TrainCache.train_price + " TEXT NOT NULL, "
-                + AppBase.TrainCache.reg + " TEXT NOT NULL, "
-                + AppBase.TrainCache.alldays + " TEXT NOT NULL, "
-                + AppBase.TrainCache.routehref + " TEXT NOT NULL, "
-                + AppBase.TrainCache.seatshref + " TEXT NOT NULL);");
+        db.beginTransaction();
+        try {
+            db.execSQL("DROP TABLE IF EXISTS " + TrainCache.TABLE_NAME);
+            db.execSQL("CREATE TABLE " + AppBase.TrainCache.TABLE_NAME + " ("
+                    + AppBase.TrainCache._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + AppBase.TrainCache.num + " TEXT NOT NULL, "
+                    + AppBase.TrainCache.lines + " TEXT NOT NULL, "
+                    + AppBase.TrainCache.tr_route + " TEXT NOT NULL, "
+                    + AppBase.TrainCache.t_depart + " TEXT NOT NULL, "
+                    + AppBase.TrainCache.t_travel + " TEXT NOT NULL, "
+                    + AppBase.TrainCache.t_arrival + " TEXT NOT NULL, "
+                    + AppBase.TrainCache.train_seats + " TEXT NOT NULL, "
+                    + AppBase.TrainCache.train_price + " TEXT NOT NULL, "
+                    + AppBase.TrainCache.reg + " TEXT NOT NULL, "
+                    + AppBase.TrainCache.alldays + " TEXT NOT NULL, "
+                    + AppBase.TrainCache.routehref + " TEXT NOT NULL, "
+                    + AppBase.TrainCache.seatshref + " TEXT NOT NULL);");
+            db.setTransactionSuccessful();
+        }
+        finally {
+            db.endTransaction();
+        }
     }
 
     private List<Train> readTrainCache() {
         List<Train> train2 = new ArrayList<>();
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        db.beginTransaction();
         firstnotdeparted = 0;
         String[] projection = {
                 TrainCache._ID,
@@ -559,8 +579,10 @@ public class TrainActivity extends AppCompatActivity {
                         currentRoutehref,currentSeatshref));
                 if (currentT_depart.contains("-")) firstnotdeparted = train2.size();
             }
+            db.setTransactionSuccessful();
         } finally {
             cursor.close();
+            db.endTransaction();
         }
         if (train2.size()!=0) return train2;
         else return null;
@@ -685,7 +707,7 @@ public class TrainActivity extends AppCompatActivity {
     //изменение состояний меню извне, с помощью invalidateOptionsMenu()
     @Override
     public boolean onPrepareOptionsMenu (Menu menu) {
-        if (/*(train.size()!=0) && */(train!=null)) menu.getItem(0).setVisible(true);
+        if (train.size()!=0) menu.getItem(0).setVisible(true);
         else menu.getItem(0).setVisible(false);
         return true;
     }
@@ -693,7 +715,7 @@ public class TrainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
+        // automatically handle clicks on the Home/Up search_button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
