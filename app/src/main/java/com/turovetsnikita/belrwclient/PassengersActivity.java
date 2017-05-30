@@ -25,11 +25,6 @@ public class PassengersActivity extends AppCompatActivity {
         doctype.setAdapter(adapter);
         doctype.setSelection(0);
 
-        placesnum = (Spinner) findViewById(R.id.PlacesNum);
-        ArrayAdapter<?> adapter2 = ArrayAdapter.createFromResource(this, R.array.Passengers4, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        placesnum.setAdapter(adapter2);
-        placesnum.setSelection(0);
     }
 
     @Override

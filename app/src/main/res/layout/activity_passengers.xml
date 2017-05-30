@@ -48,7 +48,7 @@
             <EditText
                 android:id="@+id/passengerType"
                 android:textSize="@dimen/text_size"
-                android:hint="@string/text_arrival_station"
+                android:hint="Тип пассажира"
                 android:textStyle="normal"
                 android:text="Взрослый"
                 android:layout_width="fill_parent"
@@ -69,7 +69,7 @@
             <EditText
                 android:id="@+id/Tariff"
                 android:textSize="@dimen/text_size"
-                android:hint="@string/text_arrival_station"
+                android:hint="Тариф"
                 android:textStyle="normal"
                 android:text="Полный"
                 android:layout_width="fill_parent"
@@ -90,7 +90,7 @@
             <EditText
                 android:id="@+id/Surname"
                 android:textSize="@dimen/text_size"
-                android:hint="@string/text_arrival_station"
+                android:hint="Фамилия"
                 android:textStyle="normal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -110,7 +110,7 @@
             <EditText
                 android:id="@+id/Name"
                 android:textSize="@dimen/text_size"
-                android:hint="@string/text_arrival_station"
+                android:hint="Имя"
                 android:textStyle="normal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -130,7 +130,7 @@
             <EditText
                 android:id="@+id/Patronymic"
                 android:textSize="@dimen/text_size"
-                android:hint="@string/text_arrival_station"
+                android:hint="Отчество"
                 android:textStyle="normal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -150,7 +150,7 @@
             <Spinner
                 android:id="@+id/DocType"
                 android:textSize="@dimen/text_size"
-                android:hint="@string/text_arrival_station"
+                android:hint="Тип документа"
                 android:textStyle="normal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -170,7 +170,7 @@
             <EditText
                 android:id="@+id/DocNum"
                 android:textSize="@dimen/text_size"
-                android:hint="@string/text_arrival_station"
+                android:hint="Номер документа"
                 android:textStyle="normal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -187,10 +187,11 @@
             android:id="@+id/textInputLayoutPlacesNum"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <Spinner
+            <EditText
                 android:id="@+id/PlacesNum"
                 android:textSize="@dimen/text_size"
-                android:hint="@string/text_arrival_station"
+                android:hint="Количество мест"
+                android:text="1"
                 android:textStyle="normal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

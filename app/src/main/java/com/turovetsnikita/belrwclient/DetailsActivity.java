@@ -4,6 +4,8 @@ package com.turovetsnikita.belrwclient;
  * Created by Nikita on 11.3.17.
  */
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -24,6 +26,7 @@ public class DetailsActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     ViewPagerAdapter adapter;
+    Context context = DetailsActivity.this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +69,10 @@ public class DetailsActivity extends AppCompatActivity {
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-
+                if (position==2) {
+                    Intent intent = new Intent(context, PassengersActivity.class);
+                    startActivity(intent);
+                }
             }
 
             @Override

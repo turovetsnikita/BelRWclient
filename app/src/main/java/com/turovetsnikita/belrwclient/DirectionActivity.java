@@ -1305,16 +1305,14 @@ public class DirectionActivity extends AppCompatActivity
                 else {
                     String mainrwby = "http://rasp.rw.by/ru/route/?from=Минск-Пассажирский&to=Гомель&date=2017-06-30&from_exp=0&from_esr=0&to_exp=2100100&to_esr=150000";
                     String useragent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
-                    //String useragent = "Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6";
 
-                    Connection.Response response = Jsoup
+                    /*response = Jsoup
                             .connect(mainrwby)
                             .userAgent(useragent)
                             .method(Connection.Method.POST)
                             .execute();
-
-                    response = Jsoup
-                            //.connect("https://poezd.rw.by/wps/portal/home/login?cancelUrl=" + java.net.URLEncoder.encode(mainrwby, "UTF-8") + "&lang=ru")
+*/
+                    Connection.Response response = Jsoup
                             .connect("https://poezd.rw.by/wps/PA_eTicketInquire/PaymentRedirect")
                             .userAgent(useragent)
                             .method(Connection.Method.POST)
@@ -1326,13 +1324,13 @@ public class DirectionActivity extends AppCompatActivity
                             .data("DepartureTime", "15:44")
                             .data("CarriageNumber", "03")
 
-                            //.data("CancelUrl", mainrwby)
-                            .data("CancelUrl", "http://rasp.rw.by/ru/route/?from=%D0%9C%D0%B8%D0%BD%D1%81%D0%BA-%D0%9F%D0%B0%D1%81%D1%81%D0%B0%D0%B6%D0%B8%D1%80%D1%81%D0%BA%D0%B8%D0%B9&to=%D0%93%D0%BE%D0%BC%D0%B5%D0%BB%D1%8C&date=2017-06-30&from_exp=0&from_esr=0&to_exp=2100100&to_esr=150000")
+                            .data("CancelUrl", mainrwby)
+                            //.data("CancelUrl", "http://rasp.rw.by/ru/route/?from=%D0%9C%D0%B8%D0%BD%D1%81%D0%BA-%D0%9F%D0%B0%D1%81%D1%81%D0%B0%D0%B6%D0%B8%D1%80%D1%81%D0%BA%D0%B8%D0%B9&to=%D0%93%D0%BE%D0%BC%D0%B5%D0%BB%D1%8C&date=2017-06-30&from_exp=0&from_esr=0&to_exp=2100100&to_esr=150000")
 
                             .data("SuccessUrl", "http://rasp.rw.by/ru")
                             .data("CheckValue", "149100BBF2A4B4A4C12467877005AC8B")
                             .data("ServiceClass", "3С")
-                            .cookies(response.cookies())
+                            //.cookies(response.cookies())
                             .followRedirects(true)
                             .execute(); // неверные данные формы (из-за этого проблемы с "галочкой")
 
@@ -1341,7 +1339,7 @@ public class DirectionActivity extends AppCompatActivity
                     for (Map.Entry<String, String> head : response.headers().entrySet())
                         Log.d("headers1", head.getKey() + " : " + head.getValue());
 
-                    String cookiebuf = "";
+                    String cookiebuf = ""; //для подхвата JSESSIONID
                     for (Map.Entry<String, String> cookie : response.cookies().entrySet())
                         if (cookie.getKey().equals("JSESSIONID")) cookiebuf = cookie.getValue();
 
