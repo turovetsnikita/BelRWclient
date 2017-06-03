@@ -86,8 +86,8 @@ public class CarRVAdapter extends RecyclerView.Adapter<CarRVAdapter.CarViewHolde
         String med_grey = "#BDBDBD";
 
         carViewHolder.num.setText(df.format(car.get(i).num));
-        carViewHolder.type.setText(car.get(i).type);
-        carViewHolder.descr.setText(car.get(i).descr);
+        carViewHolder.type.setText(car.get(i).typeabbr);
+        carViewHolder.descr.setText(car.get(i).type+" "+car.get(i).typeabbrpost+" "+car.get(i).sign);
 
         carViewHolder.price.setText(""+String.valueOf(car.get(i).price) + " BYN");
 

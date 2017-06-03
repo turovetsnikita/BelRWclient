@@ -26,7 +26,6 @@ public class DetailsActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     ViewPagerAdapter adapter;
-    Context context = DetailsActivity.this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +33,7 @@ public class DetailsActivity extends AppCompatActivity {
         setContentView(R.layout.details_activity);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Поезд " + getIntent().getStringExtra("num"));
+        toolbar.setTitle("Поезд " + getIntent().getStringExtra("train_num"));
         toolbar.setSubtitle(getIntent().getStringExtra("tr_route"));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -69,10 +68,7 @@ public class DetailsActivity extends AppCompatActivity {
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                if (position==2) {
-                    Intent intent = new Intent(context, PassengersActivity.class);
-                    startActivity(intent);
-                }
+
             }
 
             @Override

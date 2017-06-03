@@ -261,6 +261,8 @@
                     android:layout_toRightOf="@+id/numofplaces_text"
                     android:textStyle="bold"
                     android:textSize="@dimen/text_size"
+                    android:maxLines="2"
+                    android:ellipsize="end"
                     android:textColor="@color/colorBlack"/>
 
             </RelativeLayout>

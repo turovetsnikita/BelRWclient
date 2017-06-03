@@ -10,13 +10,14 @@ public class Train {
     String tr_route, t_depart, t_travel, t_arrival;
     short[] train_seats;
     float[] train_price;
+    String depart_num,arrival_num;
 
     Boolean reg;
     String alldays, routehref, seatshref;
 
     Train(String num, byte lines, String tr_route, String t_depart, String t_travel,
           String t_arrival, short[] seats, float[] price, Boolean reg, String alldays,
-          String routehref, String seatshref) {
+          String routehref, String seatshref, String depart_num, String arrival_num) {
         this.num = num;
         this.lines = lines;
 
@@ -35,11 +36,14 @@ public class Train {
 
         this.routehref = routehref;
         this.seatshref = seatshref;
+
+        this.depart_num = depart_num;
+        this.arrival_num = arrival_num;
     }
 
     Train(String num, byte lines, String tr_route, String t_depart, String t_travel,
           String t_arrival, float[] seats, float[] price, Boolean reg, String alldays,
-          String routehref, String seatshref) {
+          String routehref, String seatshref, String depart_num, String arrival_num) {
         this.num = num;
         this.lines = lines;
 
@@ -61,5 +65,8 @@ public class Train {
 
         this.routehref = routehref;
         this.seatshref = seatshref;
+
+        this.depart_num = depart_num;
+        this.arrival_num = arrival_num;
     }
 }

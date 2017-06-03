@@ -41,6 +41,10 @@ public final class AppBase {
 
         public final static String routehref = "routehref";
         public final static String seatshref = "seatshref";
+
+
+        public final static String depart_num = "depart_num";
+        public final static String arrival_num = "arrival_num";
     }
 /*
     public static final class RouteCache implements BaseColumns {

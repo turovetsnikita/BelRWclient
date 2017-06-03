@@ -7,17 +7,19 @@ package com.turovetsnikita.belrwclient.fragments;
 public class Car {
 
     short num;
-    String descr,type;
+    String type,typeabbr,typeabbrpost,sign;
     float price;
     short tplaces;
     byte uplaces,usplaces,lplaces,lsplaces;
-    String places;
+    String places,hash;
 
-    Car (short num,String descr,String type,float price, short tplaces,
-         byte lplaces, byte uplaces, byte lsplaces, byte usplaces, String places) {
+    Car (short num,String type,String typeabbr,String typeabbrpost,String sign,float price, short tplaces,
+         byte lplaces, byte uplaces, byte lsplaces, byte usplaces, String places, String hash) {
         this.num = num;
-        this.descr = descr;
         this.type = type;
+        this.typeabbr = typeabbr;
+        this.typeabbrpost = typeabbrpost;
+        this.sign = sign;
         this.price = price;
 
         this.tplaces = tplaces;
@@ -28,5 +30,6 @@ public class Car {
         this.usplaces = usplaces;
 
         this.places = places;
+        this.hash = hash;
     }
 }

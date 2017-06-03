@@ -55,9 +55,11 @@ public class TrainActivity extends AppCompatActivity {
     SimpleDateFormat tf1 = new SimpleDateFormat("HH", russian),
             tf2 = new SimpleDateFormat("mm", russian),
             df1 = new SimpleDateFormat("EE, dd MMM", russian),
-            df2 = new SimpleDateFormat("yyyy-MM-dd", russian);
+            df2 = new SimpleDateFormat("yyyy-MM-dd", russian),
+            df3 = new SimpleDateFormat("dd.MM.yyyy", russian);
 
     String[] cl = {"Общий","Сидячий","Плацкартный","Купе","Мягкий","СВ"};
+    String date;
     int LENGTH_VERY_LONG = 5000;
 
     private AppDbHelper mDbHelper;
@@ -86,7 +88,14 @@ public class TrainActivity extends AppCompatActivity {
                 public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                     if (isOnline()) {
                         Intent intent = new Intent(context, DetailsActivity.class);
-                        intent.putExtra("num", train.get(position).num);
+                        intent.putExtra("url", "http://rasp.rw.by/ru/route/?from="+
+                                getIntent().getStringExtra("depart")+"&from_exp=0&from_esr=0&to="+
+                                getIntent().getStringExtra("arrival")+"&to_exp=0&to_esr=0&date="+df2.format(getIntent().getLongExtra("chosen", 0)));
+                        intent.putExtra("depart_num", train.get(position).depart_num);
+                        intent.putExtra("arrival_num", train.get(position).arrival_num);
+                        intent.putExtra("train_num", train.get(position).num);
+                        intent.putExtra("date", df3.format(getIntent().getLongExtra("chosen", 0)));
+                        intent.putExtra("time", train.get(position).t_depart);
                         intent.putExtra("tr_route", train.get(position).tr_route);
                         intent.putExtra("routehref", train.get(position).routehref);
                         intent.putExtra("carhref", train.get(position).seatshref);
@@ -235,7 +244,6 @@ public class TrainActivity extends AppCompatActivity {
         @Override
         protected Document doInBackground(String... arg) {
             Document doc;
-            String date;
             if (getIntent().getLongExtra("chosen", 0)!=1) date=df2.format(getIntent().getLongExtra("chosen", 0));
             else date="everyday";
             try {
@@ -317,7 +325,7 @@ public class TrainActivity extends AppCompatActivity {
         initializeData();
         firstnotdeparted = 0;
         for (int i = 0; i < elements.size(); i++) {
-            String alldays = "",href = "",seatshref = "";
+            String alldays = "",href = "",seatshref = "",depart_num = "", arrival_num = "";
             short[] arr1 = {0, 0, 0, 0, 0, 0};
             float[] arr2 = {0, 0, 0, 0, 0, 0};
 
@@ -416,11 +424,14 @@ public class TrainActivity extends AppCompatActivity {
                     }
                 //подготовка части ссылки на свободные места
                 href = tr_elmt.select("div.train_name a").attr("href");
+
+                depart_num = href.substring(href.indexOf("from_exp=")+9,href.indexOf("from_exp=")+9+7);
+                arrival_num = href.substring(href.indexOf("to_exp=")+7,href.indexOf("to_exp=")+7+7);
+
                 if (((lines==1) || (lines==4)) && (arr1[0]==1000)) seatshref = ""; //на электрички-дизели ссылки нет
                 else
-                    seatshref = "http://rasp.rw.by/ru/ajax/route/car_places/?from="+
-                            href.substring(href.indexOf("from_exp=")+9,href.indexOf("from_exp=")+9+7)+
-                            "&to="+href.substring(href.indexOf("to_exp=")+7,href.indexOf("to_exp=")+7+7)+
+                    seatshref = "http://rasp.rw.by/ru/ajax/route/car_places/?from="+depart_num+
+                            "&to="+arrival_num+
                             "&date="+df2.format(getIntent().getLongExtra("chosen", 0))+
                             "&train_number="+tr_elmt.select("small.train_id").text()+
                             "&car_type=";
@@ -452,7 +463,9 @@ public class TrainActivity extends AppCompatActivity {
                     reg,
                     alldays,
                     href,
-                    seatshref));
+                    seatshref,
+                    depart_num,
+                    arrival_num));
             if (train.get(train.size()-1).t_depart.contains("-")) firstnotdeparted = train.size();
         }
         clearTrainCache();
@@ -478,6 +491,8 @@ public class TrainActivity extends AppCompatActivity {
                 values.put(TrainCache.alldays, cached.get(i).alldays);
                 values.put(TrainCache.routehref, cached.get(i).routehref);
                 values.put(TrainCache.seatshref, cached.get(i).seatshref);
+                values.put(TrainCache.depart_num, cached.get(i).depart_num);
+                values.put(TrainCache.arrival_num, cached.get(i).arrival_num);
                 long newRowId = db.insert(TrainCache.TABLE_NAME, null, values);
             }
             db.setTransactionSuccessful();
@@ -505,7 +520,9 @@ public class TrainActivity extends AppCompatActivity {
                     + AppBase.TrainCache.reg + " TEXT NOT NULL, "
                     + AppBase.TrainCache.alldays + " TEXT NOT NULL, "
                     + AppBase.TrainCache.routehref + " TEXT NOT NULL, "
-                    + AppBase.TrainCache.seatshref + " TEXT NOT NULL);");
+                    + AppBase.TrainCache.seatshref + " TEXT NOT NULL, "
+                    + AppBase.TrainCache.depart_num + " TEXT NOT NULL, "
+                    + AppBase.TrainCache.arrival_num + " TEXT NOT NULL);");
             db.setTransactionSuccessful();
         }
         finally {
@@ -531,7 +548,9 @@ public class TrainActivity extends AppCompatActivity {
                 TrainCache.reg,
                 TrainCache.alldays,
                 TrainCache.routehref,
-                TrainCache.seatshref};
+                TrainCache.seatshref,
+                TrainCache.depart_num,
+                TrainCache.arrival_num};
 
         Cursor cursor = db.query(
                 TrainCache.TABLE_NAME,
@@ -556,6 +575,8 @@ public class TrainActivity extends AppCompatActivity {
             int alldaysColumnIndex = cursor.getColumnIndex(TrainCache.alldays);
             int routehrefColumnIndex = cursor.getColumnIndex(TrainCache.routehref);
             int seatshrefColumnIndex = cursor.getColumnIndex(TrainCache.seatshref);
+            int depart_numColumnIndex = cursor.getColumnIndex(TrainCache.depart_num);
+            int arrival_numColumnIndex = cursor.getColumnIndex(TrainCache.arrival_num);
 
             while (cursor.moveToNext()) {
                 String currentID = cursor.getString(IDColumnIndex); //в отладочных целях
@@ -571,12 +592,14 @@ public class TrainActivity extends AppCompatActivity {
                 String currentAlldays = cursor.getString(alldaysColumnIndex);
                 String currentRoutehref = cursor.getString(routehrefColumnIndex);
                 String currentSeatshref = cursor.getString(seatshrefColumnIndex);
+                String currentDepart_num = cursor.getString(depart_numColumnIndex);
+                String currentArrival_num = cursor.getString(arrival_numColumnIndex);
 
                 train2.add(new Train(currentNum,Byte.valueOf(currentLines),currentTr_route,
                         currentT_depart,currentT_travel,currentT_arrival,
                         unpackArray(currentTrain_seats),unpackArray(currentTrain_price),
                         Boolean.valueOf(currentReg),currentAlldays,
-                        currentRoutehref,currentSeatshref));
+                        currentRoutehref,currentSeatshref,currentDepart_num,currentArrival_num));
                 if (currentT_depart.contains("-")) firstnotdeparted = train2.size();
             }
             db.setTransactionSuccessful();

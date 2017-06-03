@@ -2,6 +2,7 @@ package com.turovetsnikita.belrwclient;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,6 +13,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -92,7 +95,6 @@ public class DirectionActivity extends AppCompatActivity
     private static long back_pressed;
     int LENGTH_VERY_LONG = 5000;
     SharedPreferences sp;
-    Boolean test;
 
     private AppDbHelper mDbHelper;
 
@@ -1264,6 +1266,7 @@ public class DirectionActivity extends AppCompatActivity
         }
     }
 
+
     public void swap(View v) {
         HideKeybClearFocus();
         if ((!MultiEditText.getText().toString().equals("")) || (!MultiEditText2.getText().toString().equals(""))) {
@@ -1277,13 +1280,11 @@ public class DirectionActivity extends AppCompatActivity
         swap_button.startAnimation(animationRotate);
     }
 
-    //проверка уведомлений о перерывах в работе системы покупки билетов //TODO: + тест авторизации
+    //проверка уведомлений о перерывах в работе системы покупки билетов
     private class checkNotification extends AsyncTask<String,Integer,Document> {
         @Override
         protected Document doInBackground(String... arg) {
             Document doc;
-            String buf, buf2;
-            Elements findparam;
             Random r;
             do {
                 try {
@@ -1295,126 +1296,11 @@ public class DirectionActivity extends AppCompatActivity
                 }
             }
             while (!isOnline());
-            test = sp.getBoolean("authorization_test", false);
+
             try {
-                if (!test) {
                     doc = Jsoup.connect("http://poezd.rw.by/wps/portal/home/rp")
                             .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
                             .post();
-                }
-                else {
-                    String mainrwby = "http://rasp.rw.by/ru/route/?from=Минск-Пассажирский&to=Гомель&date=2017-06-30&from_exp=0&from_esr=0&to_exp=2100100&to_esr=150000";
-                    String useragent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
-
-                    /*response = Jsoup
-                            .connect(mainrwby)
-                            .userAgent(useragent)
-                            .method(Connection.Method.POST)
-                            .execute();
-*/
-                    Connection.Response response = Jsoup
-                            .connect("https://poezd.rw.by/wps/PA_eTicketInquire/PaymentRedirect")
-                            .userAgent(useragent)
-                            .method(Connection.Method.POST)
-                            .data("ClientNumber", "1")
-                            .data("DepartureStation", "2100001")
-                            .data("ArrivalStation", "2100100")
-                            .data("TrainNumber", "648Б")
-                            .data("DepartureDate", "30.06.2017")
-                            .data("DepartureTime", "15:44")
-                            .data("CarriageNumber", "03")
-
-                            .data("CancelUrl", mainrwby)
-                            //.data("CancelUrl", "http://rasp.rw.by/ru/route/?from=%D0%9C%D0%B8%D0%BD%D1%81%D0%BA-%D0%9F%D0%B0%D1%81%D1%81%D0%B0%D0%B6%D0%B8%D1%80%D1%81%D0%BA%D0%B8%D0%B9&to=%D0%93%D0%BE%D0%BC%D0%B5%D0%BB%D1%8C&date=2017-06-30&from_exp=0&from_esr=0&to_exp=2100100&to_esr=150000")
-
-                            .data("SuccessUrl", "http://rasp.rw.by/ru")
-                            .data("CheckValue", "149100BBF2A4B4A4C12467877005AC8B")
-                            .data("ServiceClass", "3С")
-                            //.cookies(response.cookies())
-                            .followRedirects(true)
-                            .execute(); // неверные данные формы (из-за этого проблемы с "галочкой")
-
-                    for (Map.Entry<String, String> cookie : response.cookies().entrySet()) // лог
-                        Log.d("cookie1", cookie.getKey() + " : " + cookie.getValue());
-                    for (Map.Entry<String, String> head : response.headers().entrySet())
-                        Log.d("headers1", head.getKey() + " : " + head.getValue());
-
-                    String cookiebuf = ""; //для подхвата JSESSIONID
-                    for (Map.Entry<String, String> cookie : response.cookies().entrySet())
-                        if (cookie.getKey().equals("JSESSIONID")) cookiebuf = cookie.getValue();
-
-                    doc = response.parse();
-                    if (doc.select("td.status").text().contains("Вход")) {
-                        findparam = doc.select("form");
-                        buf = findparam.attr("action"); // длинная кракозябра в url после авторизации (без нее нет перехода)
-
-                        response = Jsoup
-                                .connect("https://poezd.rw.by" + buf)
-                                .userAgent(useragent)
-                                .method(Connection.Method.POST)
-                                .data("login", sp.getString("login",""))
-                                .data("password", sp.getString("password",""))
-                                .data("_rememberUser", "on")
-                                //.data("ip", "195.50.26.222")
-                                .data("_login", "Войти в систему")
-                                .cookies(response.cookies())
-/*
-                                .cookie("JSESSIONID",cookiebuf)
-                                .cookie("lang","ru")
-                                .cookie("_ym_uid","1487532410917255092")
-                                .cookie("_ym_isad","1")
-                                .cookie("__utmt","1")
-                                .cookie("__utmt_UA-31356575-1","1")
-                                .cookie("_ym_visorc_16948750","w")
-                                .cookie("portalFlyoutIsOpen","")
-                                .cookie("portalOpenFlyout","")
-                                .cookie("_gat","1")
-                                .cookie("__utma","168334370.1490507909.1487532409.1495741916.1496098884.134")
-                                .cookie("__utmb","168334370.18.9.1496099898541")
-                                .cookie("__utmc","168334370")
-                                .cookie("__utmz","168334370.1495574388.132.8.utmcsr=rw.by|utmccn=(referral)|utmcmd=referral|utmcct=/")
-                                .cookie("_ga","GA1.2.1490507909.1487532409")
-                                .cookie("_gid","GA1.2.1806242544.1496099908")
-*/
-                                .followRedirects(true)
-                                .execute(); // авторизация работает!!
-
-                        for (Map.Entry<String, String> cookie : response.cookies().entrySet()) // лог
-                            Log.d("cookie2", cookie.getKey() + " : " + cookie.getValue());
-                        for (Map.Entry<String, String> head : response.headers().entrySet())
-                            Log.d("headers2", head.getKey() + " : " + head.getValue());
-                        Log.d("buf-2", buf);
-                    }
-
-                    doc = response.parse();
-                    findparam = doc.select("form");
-                    buf = findparam.attr("action"); // еще более длинная кракозябра в url после галочки
-
-                    findparam = doc.select("input");
-                    buf2 = findparam.get(2).attr("value"); //com.sun.faces.VIEW value
-
-                    response = Jsoup
-                            .connect("https://poezd.rw.by" + buf)
-                            .userAgent(useragent)
-                            .method(Connection.Method.POST)
-                            .data("viewns_7_48QFVAUK6HA180IQAQVJU80004_:form1:conf", "on")
-                            .data("viewns_7_48QFVAUK6HA180IQAQVJU80004_:form1:nextBtn", "Продолжить")
-                            .data("com.sun.faces.VIEW", buf2)
-                            .data("viewns_7_48QFVAUK6HA180IQAQVJU80004_:form1", "viewns_7_48QFVAUK6HA180IQAQVJU80004_:form1")
-                            .cookies(response.cookies())
-                            .cookie("JSESSIONID",cookiebuf) //храним его с момента авторизации
-                            .followRedirects(true)
-                            .execute(); // пытаемся нажать "галочку"
-
-                    for (Map.Entry<String, String> cookie : response.cookies().entrySet()) // лог
-                        Log.d("cookie3", cookie.getKey() + " : " + cookie.getValue());
-                    for (Map.Entry<String, String> head : response.headers().entrySet())
-                        Log.d("headers3", head.getKey() + " : " + head.getValue());
-                    Log.d("buf-3", buf);
-                    Log.d("buf2-3", buf2);
-
-                    doc = response.parse();
-                }
             }
             catch (Exception e) {
                 return null;
@@ -1425,30 +1311,24 @@ public class DirectionActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(Document result) {
             if (result!=null) {
-                if (test) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle("test")
-                            .setMessage(result.select("span").toString()+"/n"+result.select("td.status").text())
-                            .setCancelable(false)
-                            .setPositiveButton("OK",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    });
-                    AlertDialog alert = builder.create();
-                    alert.show();
-                }
-                else {
-                    Element elem = result.select("div.bzd-left-column-block").first();
-                    if ((elem.select("h3").text().contains("Уважаемые")) && (!test)) {
+                Element elem = result.select("div.bzd-left-column-block").first();
+                if (elem.select("h3").text().contains("Уважаемые")) {
+                    final String msg = elem.text();
+                    if (!msg.equals(getActivityPreferences("notif_text"))) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         builder.setTitle("ВАЖНО")
-                                .setMessage(elem.text())
+                                .setMessage(msg)
                                 .setCancelable(false)
                                 .setPositiveButton("OK",
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        })
+                                .setNegativeButton("Не напоминать",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                saveActivityPreferences(msg);
                                                 dialog.cancel();
                                             }
                                         });
@@ -1678,6 +1558,19 @@ public class DirectionActivity extends AppCompatActivity
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+    protected void saveActivityPreferences(String text) {
+        SharedPreferences activityPreferences = getPreferences(Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = activityPreferences.edit();
+        editor.putString("notif_text", text);
+        editor.apply();
+    }
+
+    protected String getActivityPreferences(String param) {
+        SharedPreferences activityPreferences = getPreferences(Activity.MODE_PRIVATE);
+        if (param.equals("notif_text")) return activityPreferences.getString(param, "");
+        else return "";
+    }
+
     // определение наличия/позиции запрашиваемого маршрута в истории
     private int inHistoryNum(String a, String b){
         for (int i = 0; i< recent.size(); i++)
@@ -1761,6 +1654,7 @@ public class DirectionActivity extends AppCompatActivity
         if (id == R.id.online_scoreboard) { //Онлайн-табло
             Intent intent = new Intent(context, ScoreboardActivity.class);
             startActivity(intent);
+            Toast.makeText(context,"Сервис \"Онлайн-табло\" функционирует в режиме опытной эксплуатации", Toast.LENGTH_LONG).show();
         } else if (id == R.id.account) { //Личный кабинет (список пассажиров + предстоящие/совершенные поездки)
             Snackbar.make(coordLayout,"Отображение предстоящих/совершенных поездок, регистрационные данные",Snackbar.LENGTH_LONG).show();
         } else if (id == R.id.data_usage) { // Настройки -> Использование данных

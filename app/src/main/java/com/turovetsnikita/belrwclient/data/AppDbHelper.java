@@ -57,7 +57,9 @@ public class AppDbHelper extends SQLiteOpenHelper {
                 + AppBase.TrainCache.reg + " TEXT NOT NULL, "
                 + AppBase.TrainCache.alldays + " TEXT NOT NULL, "
                 + AppBase.TrainCache.routehref + " TEXT NOT NULL, "
-                + AppBase.TrainCache.seatshref + " TEXT NOT NULL);";
+                + AppBase.TrainCache.seatshref + " TEXT NOT NULL, "
+                + AppBase.TrainCache.depart_num + " TEXT NOT NULL, "
+                + AppBase.TrainCache.arrival_num + " TEXT NOT NULL);";
 
         db.execSQL(SQL_CREATE_TRAIN_TABLE);
     }

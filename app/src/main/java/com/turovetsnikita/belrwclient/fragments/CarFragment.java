@@ -4,13 +4,10 @@ package com.turovetsnikita.belrwclient.fragments;
  * Created by Nikita on 11.3.17.
  */
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.turovetsnikita.belrwclient.DetailsActivity;
 import com.turovetsnikita.belrwclient.PassengersActivity;
 import com.turovetsnikita.belrwclient.adapters.ItemClickSupport;
 import com.turovetsnikita.belrwclient.R;
@@ -28,6 +24,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,9 +37,8 @@ public class CarFragment extends Fragment{
     CarRVAdapter adapter2;
 
     String carhref;
-    String carhrefpost = "";
-
     short[] ts;
+    DecimalFormat df = new DecimalFormat("00");
 
     public CarFragment() {
         // Required empty public constructor
@@ -80,9 +76,16 @@ public class CarFragment extends Fragment{
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                 Intent intent = new Intent(getActivity().getApplicationContext(), PassengersActivity.class);
+                intent.putExtra("home", getActivity().getIntent().getStringExtra("url"));
+                intent.putExtra("depart_station", getActivity().getIntent().getStringExtra("depart_num"));
+                intent.putExtra("arrival_station", getActivity().getIntent().getStringExtra("arrival_num"));
+                intent.putExtra("num", getActivity().getIntent().getStringExtra("train_num"));
+                intent.putExtra("depart_date", getActivity().getIntent().getStringExtra("date"));
+                intent.putExtra("depart_time", getActivity().getIntent().getStringExtra("time"));
+                intent.putExtra("car_num", df.format(car.get(position).num));
+                intent.putExtra("hash", car.get(position).hash);
+                intent.putExtra("class", car.get(position).typeabbr);
                 startActivity(intent);
-                //TODO: expandable recyclerview
-                //TODO: Chrome -> F12 -> Network -> PaymentRedirect -> Headers -> Form Data (та самая повторная отправка формы)
             }
         });
         ItemClickSupport.addTo(mrv2).setOnItemLongClickListener (new ItemClickSupport.OnItemLongClickListener() {
@@ -100,17 +103,12 @@ public class CarFragment extends Fragment{
 
         carhref = getActivity().getIntent().getStringExtra("carhref");
 
+
         if (!carhref.equals("")) {
             ts = getActivity().getIntent().getShortArrayExtra("seats");
-
-            for (int i = 0; i < 6; i++) {
-                if (ts[i] == 0) {
-                    carhrefpost = String.valueOf(i + 1);
-                    new getCars().execute();
-                    break;
-                }
-            }
+            new getCars().execute();
         }
+
         if (carhref.equals("")) { //если смотрим вагоны электричек-дизелей или все 6 типов сразу
             warning_cars.setVisibility(View.VISIBLE);
             mrv2.setVisibility(View.VISIBLE);
@@ -123,25 +121,35 @@ public class CarFragment extends Fragment{
         super.onStart();
     }
 
-    private class getCars extends AsyncTask<String, Integer, Document> {
+    private class getCars extends AsyncTask<String, Integer, Document[]> {
         @Override
-        protected Document doInBackground(String... arg) {
-            Document doc;
-            try {
-                doc = Jsoup.connect(carhref + carhrefpost)
-                        .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
-                        .post();
+        protected Document[] doInBackground(String... arg) {
+            int j=0,classes=0;
+            for (int i = 0; i < 6; i++)
+                if (ts[i] != 0) classes++;
+            Document[] doc = new Document[classes];
+            for (int i = 0; i < 6; i++) {
+                if (ts[i] != 0) {
+                    try {
+                        doc[j] = Jsoup.connect(carhref + String.valueOf(i+1))
+                                .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                                .post();
+                    } catch (IOException e) {
+                        return null;
+                    }
+                    j++;
+                }
             }
-            catch (IOException e) {
-                return null;
-            }
+
             return doc;
         }
 
         @Override
-        protected void onPostExecute(Document result) {
+        protected void onPostExecute(Document[] result) {
             if (result!=null) {
-                grabCarriage(result.select("body").toString());
+                initializeData();
+                for (int i = 0; i < result.length; i++)
+                    grabCarriage(result[i].select("body").toString());
                 if (car!=null) {
                     mrv2.setVisibility(View.VISIBLE);
                     progressbar.setVisibility(View.INVISIBLE);
@@ -151,7 +159,6 @@ public class CarFragment extends Fragment{
                 else {
                     error_processing_data.setVisibility(View.VISIBLE);
                 }
-
             }
             else {
                 error_timeout.setVisibility(View.VISIBLE);
@@ -167,18 +174,20 @@ public class CarFragment extends Fragment{
 
         List<Car> res= new ArrayList<>();
 
-        String descr,type;
+        String type,typeabbr,typeabbrpost,sign;
         float price;
         short tplaces;
         short num;
         byte lplaces,uplaces,lsplaces,usplaces;
-        String places;
+        String places, hash;
 
         do {
             do {
                 cars = cutToParam(cars, "price"); //убираем лишнее
-                type = getParam(cars, "typeAbbr");
-                descr = getParam(cars, "type");
+                type = getParam(cars, "type");
+                typeabbr = getParam(cars, "typeAbbr");
+                typeabbrpost = getParam(cars, "typeAbbrPostfix");
+                sign = getParam(cars, "sign");
                 price = Float.parseFloat(getParam(cars, "price_byn").replace(" ",""));
                 do {
                     cars = cutToParam(cars, "number");  //убираем лишнее
@@ -195,8 +204,9 @@ public class CarFragment extends Fragment{
                     }
                     }
                     places = getArr(cars);
-                    cars = cutToParam(cars, "hideLegend");  //убираем лишнее
-                    res.add(new Car(num, descr, type, price, tplaces, lplaces, uplaces, lsplaces, usplaces, places));
+                    hash = getParam(cars, "hash");
+                    cars = cutToParam(cars, "noSmoking");  //убираем лишнее
+                    res.add(new Car(num, type,typeabbr,typeabbrpost, sign, price, tplaces, lplaces, uplaces, lsplaces, usplaces, places, hash));
                 } while ((getParamPos(cars,"number")<getParamPos(cars,"price")) ||
                         ((getParamPos(cars,"number")==-1) ^ (getParamPos(cars,"price")==-1)));
             } while (getParamPos(cars,"price")!=-1);
@@ -204,7 +214,7 @@ public class CarFragment extends Fragment{
         } while (cars.length()>0);
 
         for (int i = 0; i < res.size(); i++)
-            car.add(0,res.get(i));
+            car.add(res.get(i));
     }
 
     public String getParam (String source, String param) { //string, byte, boolean
@@ -252,7 +262,7 @@ public class CarFragment extends Fragment{
     public String cutToParam(String source, String param) {
         param = "\"" + param + "\"";
         String buf;
-        buf = source/*.substring(source.indexOf(param), source.length())*/;
+        buf = source;
         if (buf.contains(param)) {
             buf = buf.substring(buf.indexOf(param), buf.length());
         }

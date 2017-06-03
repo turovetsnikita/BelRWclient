@@ -20,9 +20,15 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
+    <ScrollView
+        android:paddingTop="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:scrollbars="vertical"
         android:fadeScrollbars="true"
@@ -33,176 +39,283 @@
         tools:context="com.turovetsnikita.belrwclient.PassengersActivity"
         tools:showIn="@layout/activity_passengers">
 
-        <TextView
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="normal"
+                android:textSize="@dimen/text_size_large"
+                android:textColor="@color/colorBlack"
+                android:text="Взрослые пассажиры:"/>
+
+            <Spinner
+                android:textSize="@dimen/text_size"
+                android:hint="1"
+                android:textStyle="normal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textAppearance="@android:style/TextAppearance.Medium"
+                android:textIsSelectable="false"
+                android:imeOptions="actionDone"
+                android:inputType="textCapWords"
+                android:lines="1"
+                android:maxLines="1"
+                android:longClickable="false"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="normal"
+                android:textSize="@dimen/text_size_large"
+                android:textColor="@color/colorBlack"
+                android:text="Дети с местом:"/>
+
+            <Spinner
+                android:textSize="@dimen/text_size"
+                android:hint="0"
+                android:textStyle="normal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textAppearance="@android:style/TextAppearance.Medium"
+                android:textIsSelectable="false"
+                android:imeOptions="actionDone"
+                android:inputType="textCapWords"
+                android:lines="1"
+                android:maxLines="1"
+                android:longClickable="false"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="normal"
+                android:textSize="@dimen/text_size_large"
+                android:textColor="@color/colorBlack"
+                android:text="Дети без места:"/>
+
+            <Spinner
+                android:textSize="@dimen/text_size"
+                android:hint="0"
+                android:textStyle="normal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textAppearance="@android:style/TextAppearance.Medium"
+                android:textIsSelectable="false"
+                android:imeOptions="actionDone"
+                android:inputType="textCapWords"
+                android:lines="1"
+                android:maxLines="1"
+                android:longClickable="false"/>
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="normal"
-            android:textSize="@dimen/text_size_large"
-            android:textColor="@color/colorBlack"
-            android:text="Пассажир: 1"/>
+            app:cardUseCompatPadding="true"
+            app:cardPreventCornerOverlap="false"
+            app:cardElevation="@dimen/cardview_elevation"
+            app:cardCornerRadius="@dimen/cardview_corner_radius">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/textInputLayoutType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/passengerType"
-                android:textSize="@dimen/text_size"
-                android:hint="Тип пассажира"
-                android:textStyle="normal"
-                android:text="Взрослый"
-                android:layout_width="fill_parent"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textIsSelectable="false"
-                android:imeOptions="actionDone"
-                android:inputType="textCapWords"
-                android:lines="1"
-                android:maxLines="1"
-                android:longClickable="false"/>
-        </android.support.design.widget.TextInputLayout>
+                android:orientation="vertical"
+                android:padding="4dp">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/textInputLayoutTariff"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/Tariff"
-                android:textSize="@dimen/text_size"
-                android:hint="Тариф"
-                android:textStyle="normal"
-                android:text="Полный"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textIsSelectable="false"
-                android:imeOptions="actionDone"
-                android:inputType="textCapWords"
-                android:lines="1"
-                android:maxLines="1"
-                android:longClickable="false"/>
-        </android.support.design.widget.TextInputLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="normal"
+                    android:textSize="@dimen/text_size_large"
+                    android:textColor="@color/colorGrey"
+                    android:text="Пассажир: 1"/>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/textInputLayoutSurname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/Surname"
-                android:textSize="@dimen/text_size"
-                android:hint="Фамилия"
-                android:textStyle="normal"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textIsSelectable="false"
-                android:imeOptions="actionDone"
-                android:inputType="textCapWords"
-                android:lines="1"
-                android:maxLines="1"
-                android:longClickable="false"/>
-        </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/passengerType"
+                        android:textSize="@dimen/text_size"
+                        android:hint="Тип пассажира"
+                        android:textStyle="normal"
+                        android:text="Взрослый"
+                        android:enabled="false"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textIsSelectable="false"
+                        android:imeOptions="actionDone"
+                        android:inputType="textCapWords"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:longClickable="false"/>
+                </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/textInputLayoutName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/Name"
-                android:textSize="@dimen/text_size"
-                android:hint="Имя"
-                android:textStyle="normal"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textIsSelectable="false"
-                android:imeOptions="actionDone"
-                android:inputType="textCapWords"
-                android:lines="1"
-                android:maxLines="1"
-                android:longClickable="false"/>
-        </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutTariff"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/Tariff"
+                        android:textSize="@dimen/text_size"
+                        android:hint="Тариф"
+                        android:textStyle="normal"
+                        android:text="Полный"
+                        android:enabled="false"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textIsSelectable="false"
+                        android:imeOptions="actionDone"
+                        android:inputType="textCapWords"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:longClickable="false"/>
+                </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/textInputLayoutPatronymic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/Patronymic"
-                android:textSize="@dimen/text_size"
-                android:hint="Отчество"
-                android:textStyle="normal"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textIsSelectable="false"
-                android:imeOptions="actionDone"
-                android:inputType="textCapWords"
-                android:lines="1"
-                android:maxLines="1"
-                android:longClickable="false"/>
-        </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutSurname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/Surname"
+                        android:textSize="@dimen/text_size"
+                        android:hint="Фамилия"
+                        android:textStyle="normal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textIsSelectable="false"
+                        android:imeOptions="actionDone"
+                        android:inputType="textCapWords"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:longClickable="false"/>
+                </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/textInputLayoutDocType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <Spinner
-                android:id="@+id/DocType"
-                android:textSize="@dimen/text_size"
-                android:hint="Тип документа"
-                android:textStyle="normal"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textIsSelectable="false"
-                android:imeOptions="actionDone"
-                android:inputType="textCapWords"
-                android:lines="1"
-                android:maxLines="1"
-                android:longClickable="false"/>
-        </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/Name"
+                        android:textSize="@dimen/text_size"
+                        android:hint="Имя"
+                        android:textStyle="normal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textIsSelectable="false"
+                        android:imeOptions="actionDone"
+                        android:inputType="textCapWords"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:longClickable="false"/>
+                </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/textInputLayoutDocNum"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/DocNum"
-                android:textSize="@dimen/text_size"
-                android:hint="Номер документа"
-                android:textStyle="normal"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textIsSelectable="false"
-                android:imeOptions="actionDone"
-                android:inputType="textCapWords"
-                android:lines="1"
-                android:maxLines="1"
-                android:longClickable="false"/>
-        </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutPatronymic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/Patronymic"
+                        android:textSize="@dimen/text_size"
+                        android:hint="Отчество"
+                        android:textStyle="normal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textIsSelectable="false"
+                        android:imeOptions="actionDone"
+                        android:inputType="textCapWords"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:longClickable="false"/>
+                </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/textInputLayoutPlacesNum"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/PlacesNum"
-                android:textSize="@dimen/text_size"
-                android:hint="Количество мест"
-                android:text="1"
-                android:textStyle="normal"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.Medium"
-                android:textIsSelectable="false"
-                android:imeOptions="actionDone"
-                android:inputType="textCapWords"
-                android:lines="1"
-                android:maxLines="1"
-                android:longClickable="false"/>
-        </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutDocType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <Spinner
+                        android:id="@+id/DocType"
+                        android:textSize="@dimen/text_size"
+                        android:hint="Тип документа"
+                        android:textStyle="normal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textIsSelectable="false"
+                        android:imeOptions="actionDone"
+                        android:inputType="textCapWords"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:longClickable="false"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutDocNum"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/DocNum"
+                        android:textSize="@dimen/text_size"
+                        android:hint="Номер документа"
+                        android:textStyle="normal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textIsSelectable="false"
+                        android:imeOptions="actionDone"
+                        android:inputType="textCapWords"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:longClickable="false"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayoutPlacesNum"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/PlacesNum"
+                        android:textSize="@dimen/text_size"
+                        android:hint="Количество мест"
+                        android:text="1"
+                        android:textStyle="normal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:textIsSelectable="false"
+                        android:imeOptions="actionDone"
+                        android:inputType="textCapWords"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:longClickable="false"/>
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
 
         <android.support.v7.widget.AppCompatButton
             android:text="@string/text_order_button"
@@ -212,8 +325,10 @@
             app:backgroundTint="@color/colorGreen500"
             android:textColor="@color/colorBlack"
             android:textStyle="normal"
-            android:id="@+id/button"/>
+            android:id="@+id/order_button"/>
 
     </LinearLayout>
+
+    </ScrollView>
 
 </android.support.design.widget.CoordinatorLayout>
