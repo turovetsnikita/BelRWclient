@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -148,3 +149,237 @@
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
+=======
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_route"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="8dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:focusableInTouchMode="true"
+    tools:context="com.turovetsnikita.belrwclient.DirectionActivity"
+    tools:showIn="@layout/app_bar_route">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardUseCompatPadding="true"
+            app:cardPreventCornerOverlap="false"
+            app:cardElevation="@dimen/cardview_elevation"
+            app:cardCornerRadius="@dimen/cardview_corner_radius">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/textInputLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="2dp">
+                            <AutoCompleteTextView
+                                android:id="@+id/AutoCompleteTextView"
+                                android:textSize="@dimen/text_size"
+                                android:hint="@string/text_depart_station"
+                                android:textStyle="normal"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@android:style/TextAppearance.Medium"
+                                android:textIsSelectable="false"
+                                android:imeOptions="actionNext"
+                                android:inputType="textCapWords"
+                                android:maxLines="1"
+                                android:lines="1"
+                                android:longClickable="false" />
+                        </android.support.design.widget.TextInputLayout>
+
+                            <ProgressBar
+                                android:id="@+id/progress_bar_1"
+                                style="?android:attr/progressBarStyleSmall"
+                                android:indeterminate="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="6dp"
+                                android:visibility="gone"/>
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/textInputLayout2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <AutoCompleteTextView
+                                android:id="@+id/AutoCompleteTextView2"
+                                android:textSize="@dimen/text_size"
+                                android:hint="@string/text_arrival_station"
+                                android:textStyle="normal"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@android:style/TextAppearance.Medium"
+                                android:textIsSelectable="false"
+                                android:imeOptions="actionDone"
+                                android:inputType="textCapWords"
+                                android:lines="1"
+                                android:maxLines="1"
+                                android:longClickable="false"/>
+                        </android.support.design.widget.TextInputLayout>
+
+                            <ProgressBar
+                                android:id="@+id/progress_bar_2"
+                                style="?android:attr/progressBarStyleSmall"
+                                android:indeterminate="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="6dp"
+                                android:visibility="gone"/>
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:layout_width="@dimen/layout_icon_size"
+                        android:layout_height="@dimen/layout_icon_size"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/ic_swap"
+                        android:textSize="0sp"
+                        android:id="@+id/swap"/>
+
+                </LinearLayout>
+
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayout3"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:hint="@string/text_depart_date"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:inputType="date"
+                        android:ems="10"
+                        android:id="@+id/editText"
+                        android:textSize="@dimen/text_size"
+                        android:focusableInTouchMode="false"
+                        android:focusable="false"
+                        android:longClickable="false"/>
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+        <!-- поместить на расширяемую панель -->
+        <RadioGroup
+            android:id="@+id/radioGroupSetectTest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="vertical">
+            <RadioButton
+                android:id="@+id/radioVibrateRun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:clickable="true"
+                android:text="По маршруту" />
+            <RadioButton
+                android:id="@+id/radioVibrateStop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="По станции" />
+            <RadioButton
+                android:id="@+id/radioVibrateShort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="По номеру" />
+        </RadioGroup>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.AppCompatButton
+                android:text="@string/text_search_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/show_cached"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="2dp"
+                android:textSize="@dimen/text_size"
+                app:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/textColorPrimary"
+                android:textStyle="normal"
+                android:id="@+id/search" />
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/show_cached"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/search"
+                    android:layout_alignBottom="@+id/search"
+                    android:layout_alignParentRight="true"
+                    app:srcCompat="@drawable/ic_cached"
+                    android:visibility="visible"
+                    app:backgroundTint="@color/colorGreen" />
+
+        </RelativeLayout>
+
+		<TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="normal"
+            android:text="@string/text_history"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fadeScrollbars="true"
+            android:fadingEdge="vertical"
+            android:scrollbars="vertical" />
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
+>>>>>>> Stashed changes

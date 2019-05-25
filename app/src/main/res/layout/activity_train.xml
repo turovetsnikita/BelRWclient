@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -48,3 +49,57 @@
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
+=======
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:id="@+id/coordLayout"
+    tools:context="com.turovetsnikita.belrwclient.TrainActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/content_train"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin3"
+        android:paddingRight="@dimen/activity_horizontal_margin3"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.turovetsnikita.belrwclient.TrainActivity"
+        tools:showIn="@layout/activity_train">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="true"
+            android:fadingEdge="vertical"
+            android:id="@+id/rv1"
+            android:visibility="visible"/>
+
+        <include layout="@layout/spinner_label" />
+
+        <include layout="@layout/error_no_internet" />
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>
+>>>>>>> Stashed changes
