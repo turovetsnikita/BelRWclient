@@ -1,18 +1,3 @@
-<<<<<<< Updated upstream
-<?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
-    android:opacity="opaque">
-    <item
-        android:drawable="@color/colorGrey"/>
-
-    <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@mipmap/ic_train"/>
-    </item>
-
-</layer-list>
-=======
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
     android:opacity="opaque">
@@ -26,4 +11,3 @@
     </item>
 
 </layer-list>
->>>>>>> Stashed changes

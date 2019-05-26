@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import org.jsoup.Connection;
@@ -33,6 +34,8 @@ import java.util.Random;
 public class PassengersActivity extends AppCompatActivity {
 
     Spinner doctype;
+    EditText surname,name,patronymic,docnum;
+    String sur,nm,ptnm,dc;
     Context context = PassengersActivity.this;
     Button order_button;
     Connection.Response pass_data, rules_page;
@@ -48,6 +51,11 @@ public class PassengersActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        surname = (EditText) findViewById(R.id.Surname);
+        name = (EditText) findViewById(R.id.Name);
+        patronymic = (EditText) findViewById(R.id.Patronymic);
+        docnum = (EditText) findViewById(R.id.DocNum);
+
         doctype = (Spinner) findViewById(R.id.DocType);
         ArrayAdapter<?> adapter = ArrayAdapter.createFromResource(this, R.array.DocTypes, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -58,6 +66,10 @@ public class PassengersActivity extends AppCompatActivity {
         order_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sur = surname.getText().toString();
+                nm = name.getText().toString();
+                ptnm = patronymic.getText().toString();
+                dc = docnum.getText().toString();
                 new gotobuying().execute();
             }
         });
@@ -200,7 +212,7 @@ public class PassengersActivity extends AppCompatActivity {
             Elements findparam = result.getElementsByAttributeValue("id","viewns_7_48QFVAUK6HA180IQAQVJU80004_:pass:tableEx1:0:pp");
             Document doc = null;
 
-            try {
+            /*try {
                 response = Jsoup //получение данных о сохраненных пассажирах
                         .connect("https://poezd.rw.by/wps/PA_eTicketInquire/faces/jsps/SelectPassenger.jsp?"+
                                 "userId=" + getParam(findparam.toString(),"userId") +
@@ -212,12 +224,6 @@ public class PassengersActivity extends AppCompatActivity {
                         .execute();
             }
             catch (Exception e) {
-
-            }
-            try {
-                doc = response.parse();
-            }
-            catch (IOException e) {
 
             }
 
@@ -270,15 +276,17 @@ public class PassengersActivity extends AppCompatActivity {
                             });
             AlertDialog alert = builder.create();
             alert.show();
+            */
             /*
             button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("", editText.getText().toString());
-        clipboard.setPrimaryClip(clip);
+                ClipData clip = ClipData.newPlainText("", editText.getText().toString());
+                clipboard.setPrimaryClip(clip);
             }
-        }); */
+            }); */
+
         }
     }
 
@@ -314,16 +322,16 @@ public class PassengersActivity extends AppCompatActivity {
                         .userAgent(useragent)
                         .method(Connection.Method.POST)
                         .data(pre+"_:pass:tableEx1:0:thidden", "0")
-                        .data(pre+"_:pass:tableEx1:0:lastname", "ТУРОВЕЦ")
-                        .data(pre+"_:pass:tableEx1:0:name", "НИКИТА")
-                        .data(pre+"_:pass:tableEx1:0:patronymic", "НИКОЛАЕВИЧ")
+                        .data(pre+"_:pass:tableEx1:0:lastname", sur)
+                        .data(pre+"_:pass:tableEx1:0:name", nm)
+                        .data(pre+"_:pass:tableEx1:0:patronymic", ptnm)
                         .data(pre+"_:pass:tableEx1:0:selectType", "ПБ")
-                        .data(pre+"_:pass:tableEx1:0:docNum", "НВ2371075")
+                        .data(pre+"_:pass:tableEx1:0:docNum", dc)
                         .data(pre+"_:pass:tableEx1:0:selectPlCount", "1")
-                        .data(pre+"_:pass:id1:typeSelector", "true")
+                        .data(pre+"_:pass:id1:typeSelector", "true")/*
                         .data(pre+"_:pass:id1:cbox1", "on")
                         .data(pre+"_:pass:id1:fromPlaces", "12")
-                        .data(pre+"_:pass:id1:toPlaces", "12")
+                        .data(pre+"_:pass:id1:toPlaces", "12")*/
                         .data(pre+"_:pass:id1:freePlaces", doc.getElementsByAttributeValue("id",pre+"_:pass:id1:freePlaces").attr("value"))
                         .data(pre+"_:pass:id1:firstSeat", doc.getElementsByAttributeValue("id",pre+"_:pass:id1:firstSeat").attr("value"))
                         .data(pre+"_:pass:id1:lastSeat", doc.getElementsByAttributeValue("id",pre+"_:pass:id1:lastSeat").attr("value"))

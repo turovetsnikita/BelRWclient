@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:id="@+id/nointernet"
+    android:orientation="vertical"
+    android:visibility="visible">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="@dimen/layout_icon_size"
+        android:layout_height="@dimen/layout_icon_size"
+        android:layout_gravity="center"
+        android:padding="0dp"
+        app:srcCompat="@drawable/ic_wifi_off"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="@string/text_no_internet"
+        android:textSize="@dimen/text_size_large"
+        android:textStyle="normal"
+        android:textColor="@color/colorGrey"/>
+
+    <Button
+        android:id="@+id/refresh"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Повторить"/>
+</LinearLayout>

@@ -1,55 +1,3 @@
-<<<<<<< Updated upstream
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <color name="textColorPrimary">#FFFFFF</color>
-    <color name="navigationBarColor">#000000</color>
-
-    <color name="colorBlack">#212121</color>
-    <!-- 212121 , 757575 -->
-
-    <!-- Material Design Color Palette Used -->
-
-    <!-- 50 -->
-    <color name="activity_grey">#FAFAFA</color>
-
-    <!-- 100 -->
-    <color name="colorLightGrey">#F5F5F5</color>
-    <color name="colorLightGreen">#c8e6c9</color>
-
-    <!-- 200 -->
-    <color name="colorRefresh">#c8e6c9</color>
-
-    <!-- 300 -->
-
-
-    <!-- 400 -->
-    <color name="colorMediumGrey">#BDBDBD</color>
-
-    <!-- 500 -->
-    <color name="colorGreen500">#4caf50</color>
-    <color name="colorBlue500">#2196f3</color>
-    <color name="colorYellow500">#ffeb3b</color>
-    <color name="colorRed500">#f44336</color>
-    <color name="colorOrange500">#ff9800</color>
-
-    <!-- 600 -->
-    <color name="colorGrey">#757575</color>
-    <color name="colorGreen">#43a047</color> <!-- межрегиональные + штадлер (на Гомель) -->
-    <color name="colorBlue">#1e88e5</color> <!-- региональные (штадлер) -->
-    <color name="colorYellow">#fdd835</color> <!-- международные -->
-    <color name="colorRed">#e53935</color> <!-- городские -->
-    <color name="colorOrange">#fb8c00</color>
-
-    <!-- 700 -->
-    <color name="colorPrimary">#1e88e5</color>
-    <color name="colorAccent">#ffa000</color>
-
-    <!-- 800 -->
-    <color name="colorPrimaryDark">#1565c0</color>
-
-</resources>
-=======
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
@@ -106,4 +54,3 @@
     <color name="colorsvgGrey">#FF757575</color>
 
 </resources>
->>>>>>> Stashed changes
