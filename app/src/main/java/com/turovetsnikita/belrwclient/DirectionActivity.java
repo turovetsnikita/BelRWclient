@@ -67,10 +67,8 @@ import com.turovetsnikita.belrwclient.data.AppBase;
 import com.turovetsnikita.belrwclient.data.AppBase.RecentDirections;
 import com.turovetsnikita.belrwclient.data.AppDbHelper;
 
-
-//TODO: min API operability checked - 19 (4.4)
 //TODO: не проработаны ладшафтные ориентации
-//TODO: избавитьсся от AlertDialog
+//TODO: избавитьсся от AlertDialog (в соответствии с требованиями Material Design)
 //TODO: уведомления об отправлении/скором прибытии
 
 public class DirectionActivity extends AppCompatActivity
@@ -96,6 +94,7 @@ public class DirectionActivity extends AppCompatActivity
     Context context = DirectionActivity.this;
     private static long back_pressed;
     int LENGTH_VERY_LONG = 5000;
+    int REQUEST_CODE_PERMISSION_INTERNET = 0;
     SharedPreferences sp;
 
     boolean isfirstTextView;
@@ -248,9 +247,9 @@ public class DirectionActivity extends AppCompatActivity
                 swap(v);
             }
         });
-        show_cached.setOnClickListener(new View.OnClickListener() {
+        show_cached.setOnClickListener(new View.OnClickListener() { //последний запрос
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { //пока тестим панели поиска
                 Intent intent = new Intent(context, StationsActivity.class);
                 startActivity(intent);
             }
@@ -438,8 +437,8 @@ public class DirectionActivity extends AppCompatActivity
             }
         });
 
-        sp = PreferenceManager.getDefaultSharedPreferences(context);
         new checkNotification().execute();
+        sp = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     //нажатие кнопки Поиск
@@ -664,7 +663,6 @@ public class DirectionActivity extends AppCompatActivity
 
         }
     }
-
 
     //непосредственно граббинг станций
     public void grabStations(String stations) {
@@ -937,7 +935,7 @@ public class DirectionActivity extends AppCompatActivity
         mTextView2.clearFocus();
         InputMethodManager inputMethodManager = (InputMethodManager)
                 getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        //inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0); //Android 9 ругается
     }
 
     // определение наличия подключения к Интернет

@@ -215,9 +215,36 @@ public class CarFragment extends Fragment{
         source = cutToParam(source,param);
         param = "\"" + param + "\"";
         if (source.contains(param)) {
-            source = source.substring(source.indexOf(param)+param.length()+1, source.indexOf(",\""));
-            source = source.replace("\"","");
-            source = source.replace(",",".");
+            if ((source.contains(",\"")) && (source.contains("}")))
+            {
+                if ((source.indexOf(",\""))<(source.indexOf("}"))) {
+                    source = source.substring(source.indexOf(param) + param.length() + 1, source.indexOf(",\""));
+                    source = source.replace("\"", "");
+                    source = source.replace(",", ".");
+                }
+                else
+                {
+                    source = source.substring(source.indexOf(param) + param.length()+1, source.indexOf("}"));
+                    source = source.replace("}", "");
+                    source = source.replace(",", ".");
+                }
+            }
+            else
+            {
+                if ((source.indexOf(",\""))>(source.indexOf("}"))) {
+                    source = source.substring(source.indexOf(param) + param.length() + 1, source.indexOf(",\""));
+                    source = source.replace("\"", "");
+                    source = source.replace(",", ".");
+                }
+                else
+                {
+                    source = source.substring(source.indexOf(param) + param.length()+1, source.indexOf("}"));
+                    source = source.replace("}", "");
+                    source = source.replace(",", ".");
+                }
+            }
+
+
         }
         else source = "";
         return source;

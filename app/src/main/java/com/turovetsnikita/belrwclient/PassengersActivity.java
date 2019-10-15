@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class PassengersActivity extends AppCompatActivity {
+public class PassengersActivity extends AppCompatActivity { //самый ценный фунционал вырезан
 
     Spinner doctype;
     EditText surname,name,patronymic,docnum;
